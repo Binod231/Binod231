@@ -9,8 +9,7 @@
 - 🔨 Working on: `STORES REST API`, `Hospital-Management-System`, `Image-Editor`  
 - 💬 Ask me about: **Python, Flask, SQLAlchemy, Git, DB Design**  
 - 📫 Reach me at: **joshibinodprasad77@gmail.com**  
-- 📝 Check out my resume: [Resume Link](#) *(Update this)*
-
+- 📝 Check out my resume: **https://drive.google.com/file/d/1NDEInDzeVANCj9HM9kmiZWd4POpkxX4v/view?usp=drive_link**
 ---
 
 ### ⚙️ Tech Stack
