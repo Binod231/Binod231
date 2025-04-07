@@ -12,30 +12,32 @@
 - 📝 Check out my resume: **https://drive.google.com/file/d/1NDEInDzeVANCj9HM9kmiZWd4POpkxX4v/view?usp=drive_link**
 ---
 
-### ⚙️ Tech Stack
+### 🛠️ Tech Stack
 
-<p align="left">
-  <img src="https://img.shields.io/badge/-Python-333?style=flat&logo=python" />
-  <img src="https://img.shields.io/badge/-Flask-000?style=flat&logo=flask" />
-  <img src="https://img.shields.io/badge/-Java-007396?style=flat&logo=java" />
-  <img src="https://img.shields.io/badge/-SQLAlchemy-c76b07?style=flat&logo=databricks" />
-  <img src="https://img.shields.io/badge/-Git-F05032?style=flat&logo=git" />
-  <img src="https://img.shields.io/badge/-VS%20Code-007ACC?style=flat&logo=visual-studio-code" />
-</p>
+| Technology | Usage Estimate |
+|------------|----------------|
+| ![Python](https://img.shields.io/badge/Python-3670A0?style=for-the-badge&logo=python&logoColor=white) | ████████████████████░░ 90% |
+| ![Flask](https://img.shields.io/badge/Flask-000000?style=for-the-badge&logo=flask) | ████████████████░░░░ 80% |
+| ![HTML5](https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white) | ███████████░░░░░░░░ 60% |
+| ![Bootstrap](https://img.shields.io/badge/Bootstrap_SCSS-7952B3?style=for-the-badge&logo=bootstrap&logoColor=white) | ██████████░░░░░░░░ 55% |
+| ![Java](https://img.shields.io/badge/Java-ED8B00?style=for-the-badge&logo=java&logoColor=white) | ███████░░░░░░░░░░ 40% |
+| ![C++](https://img.shields.io/badge/C++-00599C?style=for-the-badge&logo=cplusplus&logoColor=white) | █████░░░░░░░░░░░░ 30% |
+
 
 ---
 
 ### 📈 GitHub Stats
 
 <p align="center">
-  <img src="https://github-readme-stats.vercel.app/api?username=binod231&show_icons=true&theme=radical" width="48%" />
-  <img src="https://github-readme-streak-stats.herokuapp.com/?user=binod231&theme=radical" width="48%" />
+  <img src="https://github-readme-stats.vercel.app/api?username=Binod231&show_icons=true&theme=github_dark" alt="GitHub Stats" />
+  <img src="https://github-readme-stats.vercel.app/api/top-langs/?username=Binod231&layout=compact&theme=github_dark" alt="Top Languages" />
 </p>
 
 ---
 
 ### 📂 Featured Projects
 
+- 🔗 [**Insta-News App**](https://github.com/Binod231/Insta-news-project) - Flask app using NewsAPI & Bootstrap SCSS for real-time news search with filtering._
 - 🛍️ [**STORES REST API**](https://github.com/Binod231/rest-api-project) – A RESTful API with authentication, resources, and database integration  
 - 👞 [**Hospital-Management-System**](https://github.com/Binod231/Hospital-Management-System) – Software to streamline healthcare facility operations and administration.  
 - 📚 [**Image-Editor**](https://github.com/Binod231/Image-Editor) – Flask app for image uploads and processing like grayscale, flip, and blur.
