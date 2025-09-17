@@ -26,15 +26,6 @@
 
 ---
 
-### 📈 GitHub Stats
-
-<p align="center">
-  <img src="https://github-readme-stats.vercel.app/api?username=Binod231&show_icons=true&theme=github_dark" alt="GitHub Stats" />
-  <img src="https://github-readme-stats.vercel.app/api/top-langs/?username=Binod231&layout=compact&theme=github_dark" alt="Top Languages" />
-</p>
-
----
-
 ### 📂 Featured Projects
 
 - 🔗 [**Insta-News App**](https://github.com/Binod231/Insta-news-project) - Flask app using NewsAPI & Bootstrap SCSS for real-time news search with filtering._
