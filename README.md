@@ -11,7 +11,7 @@
 
 🎓 I am a final-year B.Tech Computer Science student (Graduating May 2026)  at I.K. Gujral Punjab Technical University.
 
-🌱 My goal is to pursue a fully-funded PhD in Computer Science. I am passionate about the fundamental challenges in:
+ I am passionate about the fundamental challenges in:
 *   **Distributed Systems & Cloud-Native Computing**
 *   **Database Management & Performance Internals**
 *   **Program Analysis & Systems Security**
