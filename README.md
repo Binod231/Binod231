@@ -64,7 +64,7 @@ class BinodPrasadJoshi:
 ```
 ┌─────────────────────────────────────────────────────────────┐
 │  CLOUD & INFRA                                              │
-│  AWS EC2 · S3 · RDS · IAM · CloudWatch · Docker · Linux    │
+│  AWS EC2 · S3 · RDS · IAM · CloudWatch · Docker · Linux     │
 ├─────────────────────────────────────────────────────────────┤
 │  DEVOPS / CI/CD                                             │
 │  GitHub Actions · Docker Compose · Container Orchestration  │
