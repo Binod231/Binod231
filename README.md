@@ -4,7 +4,7 @@
      REPLACE the src below with your raw GitHub image URL
      e.g. https://raw.githubusercontent.com/Binod231/Binod231/main/profile.jpg
      ═══════════════════════════════════════════════════ -->
-<img src="Passportsizepic11.jpg"
+<img src="[WhatsApp%20Image%202026-05-28%20at%2010.37.32%20AM.jpeg]"
      width="140"
      style="border-radius:50%; border: 3px solid #00D9FF;"
      alt="Binod Prasad Joshi" />
