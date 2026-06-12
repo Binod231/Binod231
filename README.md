@@ -30,7 +30,7 @@
 
 ```python
 class BinodPrasadJoshi:
-    location   = "Amritsar, India  →  open to Bengaluru"
+    location   = " Pokhara Nepal"
     role       = "Devops Consultant"
     education  = "B.Tech CS · IKGPTU · GPA 8.03 · May 2026"
     recognitions = [
