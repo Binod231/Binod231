@@ -31,7 +31,7 @@
 ```python
 class BinodPrasadJoshi:
     location   = "Amritsar, India  →  open to Bengaluru"
-    role       = "Junior Backend / Cloud Engineer @ Karnovation Inc."
+    role       = "Devops Consultant"
     education  = "B.Tech CS · IKGPTU · GPA 8.03 · May 2026"
     recognitions = [
         "AWS Community Builder — Dev Tools (2026)",
