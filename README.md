@@ -4,7 +4,7 @@
 
 <p align="center">
   <a href="https://github.com/Binod231">
-    <img src="https://readme-typing-svg.demolab.com?font=JetBrains+Mono&weight=600&size=20&duration=2800&pause=900&color=38BDF8&center=true&vCenter=true&width=720&lines=Cloud+%26+DevOps+Consultant+%7C+2x+AWS+Certified;AWS+Community+Builder+(Dev+Tools+2026);Architecting+99.9%25+SLA+Multi-AZ+AWS+Infrastructure;CI%2FCD+Automation+%E2%80%A2+FinOps+%E2%80%A2+DevSecOps+%E2%80%A2+AI+Infra" alt="Typing SVG" />
+    <img src="https://readme-typing-svg.demolab.com?font=JetBrains+Mono&weight=700&size=19&duration=2600&pause=800&color=38BDF8&center=true&vCenter=true&width=760&lines=root%40binod-cloud%3A~%23+whoami+--devops;Cloud+%26+DevOps+Consultant+%7C+2x+AWS+Certified;AWS+Community+Builder+(Dev+Tools+2026);Multi-AZ+AWS+%E2%80%A2+CI%2FCD+%E2%80%A2+FinOps+%E2%80%A2+DevSecOps+%E2%80%A2+AI+Infra" alt="Typing SVG" />
   </a>
 </p>
 
@@ -18,117 +18,137 @@
   <a href="https://drive.google.com/file/d/1QdJ0GqlDd9ft0moKAfKePkIh_cKaUklA/view?usp=sharing">
     <img src="https://img.shields.io/badge/Resume-10B981?style=for-the-badge&logo=readthedocs&logoColor=white" alt="Resume" />
   </a>
-  <img src="https://komarev.com/ghpvc/?username=Binod231&label=Profile%20Views&color=0ea5e9&style=for-the-badge" alt="Profile Views" />
+  <img src="https://komarev.com/ghpvc/?username=Binod231&label=TERMINAL_HITS&color=0ea5e9&style=for-the-badge" alt="Profile Views" />
 </p>
 
 ---
 
-### About Me — `whoami --devops`
+### `root@binod-cloud:~# neofetch --profile`
+
+<table>
+  <tr>
+    <td width="240" align="center" valign="middle">
+      <img src="./assets/profile.jpeg" alt="Binod Prasad Joshi" width="200" style="border-radius: 14px;" />
+      <br/><br/>
+      <code>[ STATUS: ONLINE ]</code><br/>
+      <code>[ UTC+5:45 | REMOTE ]</code>
+    </td>
+    <td valign="top">
 
 ```yaml
-name: Binod Prasad Joshi
-role: DevOps Consultant @ Glovion Consulting Private Limited
-certifications:
-  - 2x AWS Certified
-  - AWS Community Builder (Dev Tools, 2026)
-  - Google Student Ambassador (Google DSC, 2026)
-location: Remote-friendly (UTC+5:45)
-focus:
-  - Multi-AZ AWS Cloud Architecture & ECS Fargate
-  - Private Cloud & Multi-Data Center Operations
-  - Enterprise ERP (Odoo) Lifecycle & PostgreSQL Tuning
-  - Automated CI/CD, FinOps (~30% Cost Reduction) & DevSecOps
+OPERATOR      : Binod Prasad Joshi
+CLASS         : Cloud & DevOps Consultant (Lv. 99)
+GUILD         : Glovion Consulting Private Limited
+BADGES        : [2x AWS Certified] [AWS Community Builder 2026] [GDSC Lead]
+UPTIME_BUFF   : 99.9% SLA Multi-AZ Architecture
+SPEED_BUFF    : ~50% Faster CI/CD Pipeline Execution
+FINOPS_BUFF   : ~30% Monthly Cloud Bill Reduction
+SECURITY_BUFF : Zero Security Incident Track Record
+
+ACTIVE_LOADOUT:
+  - AWS (EC2, S3, RDS, ECS Fargate, IAM, WAF, CloudWatch, Bedrock)
+  - Docker, GitHub Actions, Nginx, Linux (Ubuntu/Debian), Bash
+  - Prometheus, Grafana, ERP (Odoo) Ops, Multi-Data Center Telemetry
+  - Python, FastAPI, Django, PostgreSQL, Redis, pgvector, ChromaDB
 ```
+
+    </td>
+  </tr>
+</table>
 
 ---
 
-### Interactive DevOps & Cloud Architecture
+### `root@binod-cloud:~# ./list_quests.sh --interactive`
 
-> Click any domain below to expand the production architecture, deliverables, and impact metrics.
+> Click any mission terminal below to inspect architecture, deliverables, and unlocked impact.
 
 <details>
-<summary><b>[01] Cloud Architecture & Modernization</b> — <code>99.9% Uptime SLA Architecture</code></summary>
+<summary><b>[QUEST_01] Cloud Architecture & Modernization</b> — <code>REWARD: 99.9% Uptime SLA</code></summary>
 <br/>
 
-- **Multi-AZ VPC & Subnet Topology**: Isolated public/private subnets, NAT Gateways, and secure ingress routing.
-- **Container Orchestration**: Production **ECS Fargate** & Docker workloads with zero-downtime rolling deployments.
-- **High-Availability Persistence**: **RDS PostgreSQL / MySQL Multi-AZ** clustering, Route 53 DNS, CloudFront CDN, and AWS WAF.
+```text
+> Deploying Multi-AZ VPC & Subnet topology... [OK]
+> Orchestrating ECS Fargate & Docker workloads... [OK]
+> Clustering RDS PostgreSQL / MySQL Multi-AZ + Route 53 + CloudFront + WAF... [OK]
+```
 - **Stack**: `AWS VPC` • `ECS Fargate` • `RDS Multi-AZ` • `Route 53` • `CloudFormation`
 
 </details>
 
 <details>
-<summary><b>[02] DevOps & Automated CI/CD Pipelines</b> — <code>~50% Faster Pipeline Execution</code></summary>
+<summary><b>[QUEST_02] DevOps & Automated CI/CD Pipelines</b> — <code>REWARD: ~50% Faster Builds</code></summary>
 <br/>
 
-- **Enterprise GitHub Actions**: Automated build, test, lint, and deployment gates.
-- **Multi-Stage Docker Caching**: Cut container build times by ~50% with layer caching and slim runtime images.
-- **Zero-Downtime Rollouts**: ASG instance refresh & automated **Alembic** database schema migrations.
+```text
+> Configuring enterprise GitHub Actions gates... [OK]
+> Enabling multi-stage Docker layer caching (~50% build time cut)... [OK]
+> Executing zero-downtime ASG rolling updates & Alembic migrations... [OK]
+```
 - **Stack**: `GitHub Actions` • `Docker` • `Docker Compose` • `Alembic` • `Linux / Bash`
 
 </details>
 
 <details>
-<summary><b>[03] Cloud FinOps & Cost Optimization</b> — <code>~30% Monthly Cloud Bill Reduction</code></summary>
+<summary><b>[QUEST_03] Cloud FinOps & Cost Optimization</b> — <code>REWARD: ~30% Cloud Bill Cut</code></summary>
 <br/>
 
-- **Compute & Memory Rightsizing**: CloudWatch telemetry audits to eliminate overprovisioned EC2/ECS spend.
-- **Architecture Optimization**: Replaced high-cost services (e.g., OpenSearch) with tuned **PostgreSQL** indexing & **Redis ElastiCache**.
-- **Storage Lifecycle**: S3 Intelligent-Tiering and automated archival policies.
+```text
+> Auditing CloudWatch compute & memory rightsizing... [OK]
+> Replacing high-cost OpenSearch with tuned PostgreSQL + Redis ElastiCache... [OK]
+> Applying S3 Intelligent-Tiering & Lifecycle policies... [OK]
+```
 - **Stack**: `AWS Cost Explorer` • `CloudWatch` • `Redis ElastiCache` • `PostgreSQL`
 
 </details>
 
 <details>
-<summary><b>[04] DevSecOps & Shift-Left Security</b> — <code>Zero Security Incident Track Record</code></summary>
+<summary><b>[QUEST_04] DevSecOps & Shift-Left Security</b> — <code>REWARD: Zero Incidents</code></summary>
 <br/>
 
-- **Edge & IAM Hardening**: AWS WAF rate-limiting, IP reputation lists, least-privilege IAM, and private subnet isolation.
-- **Shift-Left SAST**: Automated Static Application Security Testing integrated directly into CI/CD.
-- **Disaster Recovery**: Automated backup vaults with **AWS Backup**, **AWS Config**, and multi-location DR sync.
+```text
+> Hardening AWS WAF rate-limiting & least-privilege IAM... [OK]
+> Injecting Static Application Security Testing (SAST) into CI/CD... [OK]
+> Automating AWS Backup vaults & multi-location DR sync... [OK]
+```
 - **Stack**: `AWS WAF` • `IAM` • `AWS Config` • `SAST` • `OAuth2 / JWT`
 
 </details>
 
 <details>
-<summary><b>[05] Generative AI & RAG Infrastructure</b> — <code>&lt;100ms API Response for Core Workflows</code></summary>
+<summary><b>[QUEST_05] Generative AI & RAG Infrastructure</b> — <code>REWARD: &lt;100ms Core API</code></summary>
 <br/>
 
-- **Async AI Pipelines**: Decoupled long-running LLM inference using asynchronous task queues and S3 pre-signed workflows.
-- **Grounded RAG**: Production vector search with **pgvector** & **ChromaDB** integrated with **Amazon Bedrock**.
+```text
+> Decoupling slow LLM inference via async task queues... [OK]
+> Integrating Amazon Bedrock + grounded RAG (pgvector / ChromaDB)... [OK]
+```
 - **Stack**: `Amazon Bedrock` • `AWS SAM` • `FastAPI Async` • `pgvector` • `ChromaDB`
 
 </details>
 
 ---
 
-### DevOps & Engineering Stack
+### `root@binod-cloud:~# ./render_graphs.sh --all`
 
-<p align="center">
-  <img src="https://skillicons.dev/icons?i=aws,docker,linux,githubactions,nginx,postgres,mysql,redis,python,fastapi,django,flask,git,bash,grafana,prometheus&perline=8" alt="Tech Stack" />
-</p>
+#### 1. Gamified Contribution Snake
+<div align="center">
+  <img src="./dist/github-contribution-grid-snake-dark.svg" alt="Contribution Snake" width="100%" />
+</div>
 
-| Domain | Technologies |
-| :--- | :--- |
-| **Cloud & IaC** | `AWS (EC2, S3, RDS, ECS Fargate, IAM, WAF, CloudWatch, Bedrock)` • `CloudFormation` • `AWS SAM` • `Private Cloud` |
-| **CI/CD & Containers** | `GitHub Actions` • `Docker` • `Docker Compose` • `Nginx` • `Linux (Ubuntu/Debian)` • `Bash` |
-| **Observability & Ops** | `Prometheus` • `Grafana` • `CloudWatch` • `Multi-Data Center Monitoring` • `ERP (Odoo) Ops` |
-| **Backend & Data** | `Python` • `FastAPI` • `Django` • `Flask` • `PostgreSQL` • `MySQL` • `Redis` • `pgvector` • `ChromaDB` |
-
----
-
-### 3D Isometric Contribution Graph & Live Telemetry
-
-> Powered by GitHub Actions (`update-3d-contrib.yml`) — automatically rendered in 3D every day.
-
+#### 2. 3D Isometric Contribution Matrix
 <div align="center">
   <img src="./profile-3d-contrib/profile-night-rainbow.svg" alt="3D GitHub Contributions" width="100%" />
+</div>
+
+#### 3. Live Telemetry, Top Languages & Streak
+<div align="center">
+  <img src="https://github-readme-stats.vercel.app/api?username=Binod231&show_icons=true&theme=tokyonight&hide_border=true&bg_color=0d1117&title_color=38bdf8&icon_color=38bdf8&text_color=cbd5e1" alt="Binod's GitHub Stats" height="175" />
+  <img src="https://github-readme-stats.vercel.app/api/top-langs/?username=Binod231&layout=compact&theme=tokyonight&hide_border=true&bg_color=0d1117&title_color=38bdf8&text_color=cbd5e1" alt="Top Languages" height="175" />
 </div>
 
 <br/>
 
 <div align="center">
-  <img src="https://github-readme-stats.vercel.app/api?username=Binod231&show_icons=true&theme=tokyonight&hide_border=true&bg_color=0d1117&title_color=38bdf8&icon_color=38bdf8&text_color=cbd5e1" alt="Binod's GitHub Stats" height="175" />
   <img src="https://github-readme-streak-stats.herokuapp.com/?user=Binod231&theme=tokyonight&hide_border=true&background=0d1117&ring=38bdf8&fire=f59e0b&currStreakLabel=38bdf8" alt="GitHub Streak" height="175" />
 </div>
 
@@ -141,6 +161,9 @@ focus:
 ---
 
 <p align="center">
-  <sub>Crafted with DevOps precision • Open to Cloud &amp; DevOps Consulting</sub>
+  <img src="https://skillicons.dev/icons?i=aws,docker,linux,githubactions,nginx,postgres,mysql,redis,python,fastapi,django,flask,git,bash,grafana,prometheus&perline=8" alt="Tech Stack" />
 </p>
 
+<p align="center">
+  <sub>[EOF] Crafted with DevOps precision • Open to Cloud &amp; DevOps Consulting</sub>
+</p>

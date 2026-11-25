@@ -1,8 +1,7 @@
-name: Generate 3D GitHub Contributions
+name: Generate 3D & Snake Contributions
 
 on:
   schedule:
-    # Runs every day at 00:00 UTC
     - cron: "0 0 * * *"
   workflow_dispatch:
 
@@ -12,18 +11,27 @@ permissions:
 jobs:
   build:
     runs-on: ubuntu-latest
-    name: Generate 3D Contribution Graph
+    name: Generate 3D & Snake Contribution Graphs
     steps:
       - uses: actions/checkout@v4
-      - uses: yoshi389111/github-profile-3d-contrib@0.7.1
+
+      - name: Generate 3D Contribution Graph
+        uses: yoshi389111/github-profile-3d-contrib@0.7.1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           USERNAME: ${{ github.repository_owner }}
-      - name: Commit & Push 3D Contrib SVGs
+
+      - name: Generate Contribution Snake
+        uses: Platane/snk@v3
+        with:
+          github_user_name: ${{ github.repository_owner }}
+          outputs: |
+            dist/github-contribution-grid-snake-dark.svg?palette=github-dark
+
+      - name: Commit & Push SVGs
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add profile-3d-contrib/
-          git commit -m "chore: update 3d contribution graph" || exit 0
+          git add profile-3d-contrib/ dist/
+          git commit -m "chore: update 3d and snake contribution graphs" || exit 0
           git push
-
