@@ -12,6 +12,7 @@
   </a>
   <br/>
   <code>
+    <a href="https://binod231.github.io/Binod231/">[ ./play_arcade ]</a> &nbsp;
     <a href="https://binodprasadjoshi.com.np">[ ./portfolio ]</a> &nbsp;
     <a href="https://www.linkedin.com/in/binod-prasad-joshi-549067281">[ ./linkedin ]</a> &nbsp;
     <a href="https://www.credly.com/badges/4fe1dc98-121e-41ed-a1b1-0d611ef6b6ac/public_url">[ ./aws-saa-c03 ]</a> &nbsp;
@@ -51,11 +52,15 @@ root@binod-cloud:~# ./skyline_3d.sh --render --days=365
 ---
 
 ```bash
-root@binod-cloud:~# ./devops_defender.sh --grid=live
+root@binod-cloud:~# ./devops_defender.sh --grid=live --launch="https://binod231.github.io/Binod231/"
 ```
 
 <div align="center">
-  <img src="./assets/devops-arcade-game.svg" alt="DevOps Defender Live Contribution Matrix" width="100%" />
+  <a href="https://binod231.github.io/Binod231/">
+    <img src="./assets/devops-arcade-game.svg" alt="Click to Play Live DevOps Defender Terminal Arcade" width="100%" />
+  </a>
+  <br/>
+  <code><a href="https://binod231.github.io/Binod231/">[ &gt; CLICK HERE TO PLAY LIVE TERMINAL ARCADE &amp; INTERACTIVE CLI ]</a></code>
 </div>
 
 ---
