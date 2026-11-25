@@ -241,7 +241,7 @@ def generate_ubuntu_terminal(repos: int, followers: int, total_str: str, weeks: 
       verified=[<tspan fill="#fbbf24">AWS SAA-C03</tspan>, <tspan fill="#38bdf8">AWS CLF-C02</tspan>, <tspan fill="#8ae234">AWS Community Builder 2026</tspan>] | followers=<tspan font-weight="bold">{followers}</tspan>
     </text>
 
-    <!-- Prompt 2: ./metrics --prod -->
+    <!-- Prompt 2: metrics prod -->
     <text x="24" y="214">
       <tspan fill="#8ae234" font-weight="bold">binod@aws-cloud</tspan><tspan fill="#eeeeec">:</tspan><tspan fill="#729fcf" font-weight="bold">~</tspan><tspan fill="#eeeeec">$ ./metrics.sh --prod-impact</tspan>
     </text>

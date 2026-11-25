@@ -9,12 +9,12 @@
 </p>
 
 <p align="center">
-  <a href="https://binod231.github.io/Binod231/"><img src="https://img.shields.io/badge/%24-help__interactive__cli-8ae234?style=flat-square&labelColor=300a24" alt="Interactive CLI" /></a>
-  <a href="https://binod231.github.io/Binod231/"><img src="https://img.shields.io/badge/%24-play__aws__racer-e95420?style=flat-square&labelColor=300a24" alt="AWS DevOps Racer" /></a>
+  <a href="https://binod231.github.io/Binod231/"><img src="https://img.shields.io/badge/%24-terminal__cli-8ae234?style=flat-square&labelColor=300a24" alt="Interactive CLI" /></a>
+  <a href="https://binod231.github.io/Binod231/"><img src="https://img.shields.io/badge/%24-aws__racer-e95420?style=flat-square&labelColor=300a24" alt="AWS DevOps Racer" /></a>
   <a href="https://binodprasadjoshi.com.np"><img src="https://img.shields.io/badge/%24-portfolio-38bdf8?style=flat-square&labelColor=300a24" alt="Portfolio" /></a>
   <a href="https://www.linkedin.com/in/binod-prasad-joshi-549067281"><img src="https://img.shields.io/badge/%24-linkedin-729fcf?style=flat-square&labelColor=300a24" alt="LinkedIn" /></a>
-  <a href="https://www.credly.com/badges/4fe1dc98-121e-41ed-a1b1-0d611ef6b6ac/public_url"><img src="https://img.shields.io/badge/%24-aws__saa__c03-f59e0b?style=flat-square&labelColor=300a24" alt="AWS SAA" /></a>
-  <a href="https://drive.google.com/file/d/1QdJ0GqlDd9ft0moKAfKePkIh_cKaUklA/view?usp=sharing"><img src="https://img.shields.io/badge/%24-resume.pdf-ad7fa8?style=flat-square&labelColor=300a24" alt="Resume" /></a>
+  <a href="https://www.credly.com/badges/4fe1dc98-121e-41ed-a1b1-0d611ef6b6ac/public_url"><img src="https://img.shields.io/badge/%24-aws__saa-f59e0b?style=flat-square&labelColor=300a24" alt="AWS SAA" /></a>
+  <a href="https://drive.google.com/file/d/1QdJ0GqlDd9ft0moKAfKePkIh_cKaUklA/view?usp=sharing"><img src="https://img.shields.io/badge/%24-resume-ad7fa8?style=flat-square&labelColor=300a24" alt="Resume" /></a>
 </p>
 
 ---
