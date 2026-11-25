@@ -47,7 +47,7 @@ binod@aws-cloud:~$ whoami --verbose
 ```yaml
 operator      : Binod Prasad Joshi
 role          : Cloud & DevOps Consultant @ Glovion Consulting Private Limited
-location      : Pokhara, Nepal (UTC+5:45 | Remote-friendly)
+location      : Kathmandu, Nepal (UTC+5:45 | Remote-friendly)
 certifications: [AWS Solutions Architect - Associate (SAA-C03), AWS Cloud Practitioner (CLF-C02)]
 recognitions  : [AWS Community Builder - Dev Tools (2026), Google Student Ambassador (2026)]
 impact_summary:

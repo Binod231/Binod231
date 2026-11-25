@@ -144,7 +144,7 @@ def build_dot_matrix_portrait(img_path: Path, cx: int, cy: int, radius: int = 66
             lum = raw / 255.0
             sphere = math.sqrt(max(0.0, 1.0 - dist * dist))
             intensity = min(1.0, max(0.18, (1.0 - lum) * 0.55 + edge * 0.85 + (0.35 if 0.28 < lum < 0.82 else 0.0)))
-            r_dot = (0.55 + intensity * 1.45) * (0.82 + 0.22 * sphere)
+            r_dot = (0.85 + intensity * 2.15) * (0.82 + 0.22 * sphere)
 
             x = start_x + gx * step
             y = start_y + gy * step
@@ -166,9 +166,9 @@ def build_dot_matrix_portrait(img_path: Path, cx: int, cy: int, radius: int = 66
 
 
 def generate_ubuntu_terminal(repos: int, followers: int, total_str: str, weeks: list):
-    """Generate authentic Ubuntu GNOME Terminal outer window with live stats, inline graph, and 3D visuals."""
+    """Generate authentic Ubuntu GNOME Terminal outer window with live stats, inline graph, and fitted dot-matrix portrait."""
     now_str = datetime.datetime.now(datetime.timezone.utc).strftime("%d %b %Y, %H:%M:%S UTC")
-    portrait_dots = build_dot_matrix_portrait(ASSETS_DIR / "profile.jpeg", cx=985, cy=135, radius=68)
+    portrait_dots = build_dot_matrix_portrait(ASSETS_DIR / "profile.jpeg", cx=980, cy=206, radius=106)
 
     # Build inline contribution intensity strip (last 20 weeks) like lowlighter metrics '#' blocks
     recent = weeks[-20:] if len(weeks) >= 20 else weeks
@@ -190,18 +190,10 @@ def generate_ubuntu_terminal(repos: int, followers: int, total_str: str, weeks: 
       <stop offset="0%" stop-color="#484642"/>
       <stop offset="100%" stop-color="#2c2b29"/>
     </linearGradient>
-    <linearGradient id="awsTop" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#fbbf24"/>
-      <stop offset="100%" stop-color="#e95420"/>
-    </linearGradient>
   </defs>
   <style>
     @keyframes blink {{ 0%, 49% {{ opacity: 1; }} 50%, 100% {{ opacity: 0; }} }}
-    @keyframes float3d {{ 0%, 100% {{ transform: translateY(0px); }} 50% {{ transform: translateY(-7px); }} }}
-    @keyframes spinRing {{ from {{ transform: rotate(0deg); }} to {{ transform: rotate(360deg); }} }}
     .cursor {{ animation: blink 1.1s infinite; }}
-    .cube-float {{ animation: float3d 4s ease-in-out infinite; }}
-    .spin-hud {{ transform-origin: 985px 135px; animation: spinRing 24s linear infinite; }}
   </style>
 
   <!-- Ubuntu Terminal Outer Window -->
@@ -255,41 +247,23 @@ def generate_ubuntu_terminal(repos: int, followers: int, total_str: str, weeks: 
 
     <!-- Prompt 4: live cursor -->
     <text x="24" y="330">
-      <tspan fill="#8ae234" font-weight="bold">binod@aws-cloud</tspan><tspan fill="#eeeeec">:</tspan><tspan fill="#729fcf" font-weight="bold">~</tspan><tspan fill="#eeeeec">$ ./run_all_modules.sh --interactive</tspan>
+      <tspan fill="#8ae234" font-weight="bold">binod@aws-cloud</tspan><tspan fill="#eeeeec">:</tspan><tspan fill="#729fcf" font-weight="bold">~</tspan><tspan fill="#eeeeec">$ ./run_all_modules.sh --interactive </tspan><tspan fill="#8ae234" class="cursor">&#9608;</tspan>
     </text>
-    <rect x="378" y="317" width="9" height="16" fill="#8ae234" class="cursor"/>
 
-    <text x="24" y="376" fill="#ad7fa8">Connection established with Binod231 (Pokhara, NP / UTC+5:45)</text>
+    <text x="24" y="376" fill="#ad7fa8">Connection established with Binod231 (Kathmandu, Nepal / UTC+5:45)</text>
   </g>
 
-  <!-- Right Side inside Ubuntu Terminal: 3D Dot-Matrix Headshot + 3D Isometric AWS Cubes -->
+  <!-- Right Rectangle inside Ubuntu Terminal: Fitted 3D Dot-Matrix Headshot -->
   <g>
     <rect x="822" y="52" width="316" height="328" rx="10" fill="#1e0617" stroke="#5c3566" stroke-width="1"/>
-    <text x="980" y="72" text-anchor="middle" font-family="monospace" font-size="11" fill="#8ae234" font-weight="bold">[3D_HOLO_ID // BINOD231]</text>
+    <text x="980" y="76" text-anchor="middle" font-family="monospace" font-size="11.5" fill="#8ae234" font-weight="bold">[3D_HOLO_ID // BINOD231]</text>
 
-    <!-- Dot-matrix headshot -->
-    <circle cx="985" cy="148" r="76" fill="none" stroke="#8ae234" stroke-width="1.2" stroke-dasharray="10 6" class="spin-hud"/>
-    <g transform="translate(0, 13)">
-      {portrait_dots}
-    </g>
+    <circle cx="980" cy="206" r="115" fill="none" stroke="#8ae234" stroke-width="1.3" stroke-dasharray="10 6"/>
+    <circle cx="980" cy="206" r="109" fill="none" stroke="#38bdf8" stroke-width="0.9" opacity="0.6"/>
+    {portrait_dots}
 
-    <!-- Mini 3D Isometric Cluster below hologram -->
-    <g transform="translate(888, 240)" class="cube-float">
-      <polygon points="92,16 132,35 92,54 52,35" fill="url(#awsTop)"/>
-      <polygon points="52,35 92,54 92,92 52,73" fill="#ce5c00"/>
-      <polygon points="132,35 92,54 92,92 132,73" fill="#8f3902"/>
-      <text x="92" y="39" text-anchor="middle" font-family="monospace" font-size="10.5" font-weight="bold" fill="#fff">AWS</text>
-
-      <polygon points="36,52 64,65 36,78 8,65" fill="#729fcf"/>
-      <polygon points="8,65 36,78 36,104 8,91" fill="#3465a4"/>
-      <polygon points="64,65 36,78 36,104 64,91" fill="#204a87"/>
-      <text x="36" y="69" text-anchor="middle" font-family="monospace" font-size="8.5" font-weight="bold" fill="#fff">ECS</text>
-
-      <polygon points="148,52 176,65 148,78 120,65" fill="#8ae234"/>
-      <polygon points="120,65 148,78 148,104 120,91" fill="#4e9a06"/>
-      <polygon points="176,65 148,78 148,104 176,91" fill="#2d5a04"/>
-      <text x="148" y="69" text-anchor="middle" font-family="monospace" font-size="8.5" font-weight="bold" fill="#fff">OPS</text>
-    </g>
+    <text x="980" y="352" text-anchor="middle" font-family="monospace" font-size="11.5" fill="#eeeeec" font-weight="bold">Kathmandu, Nepal</text>
+    <text x="980" y="368" text-anchor="middle" font-family="monospace" font-size="10.5" fill="#ad7fa8">UTC+5:45 | Remote-Ready</text>
   </g>
 </svg>
 """
