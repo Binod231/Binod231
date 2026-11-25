@@ -1,177 +1,146 @@
 <div align="center">
+  <img src="./assets/devops-3d-banner.svg" alt="Binod Prasad Joshi - Cloud & DevOps Consultant 3D Banner" width="100%" />
+</div>
 
-<!-- ═══════════════════════════════════════════════════
-     REPLACE the src below with your raw GitHub image URL
-     e.g. https://raw.githubusercontent.com/Binod231/Binod231/main/profile.jpg
-     ═══════════════════════════════════════════════════ -->
-<img src="WhatsApp Image 2026-05-28 at 10.37.32 AM.jpeg"
-     width="140"
-     style="border-radius:50%; border: 3px solid #00D9FF;"
-     alt="Binod Prasad Joshi" />
+<p align="center">
+  <a href="https://github.com/Binod231">
+    <img src="https://readme-typing-svg.demolab.com?font=JetBrains+Mono&weight=600&size=20&duration=2800&pause=900&color=38BDF8&center=true&vCenter=true&width=720&lines=Cloud+%26+DevOps+Consultant+%7C+2x+AWS+Certified;AWS+Community+Builder+(Dev+Tools+2026);Architecting+99.9%25+SLA+Multi-AZ+AWS+Infrastructure;CI%2FCD+Automation+%E2%80%A2+FinOps+%E2%80%A2+DevSecOps+%E2%80%A2+AI+Infra" alt="Typing SVG" />
+  </a>
+</p>
 
+<p align="center">
+  <a href="https://www.linkedin.com/in/binod-prasad-joshi-549067281">
+    <img src="https://img.shields.io/badge/LinkedIn-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white" alt="LinkedIn" />
+  </a>
+  <a href="mailto:joshibinodprasad77@gmail.com">
+    <img src="https://img.shields.io/badge/Email-EA4335?style=for-the-badge&logo=gmail&logoColor=white" alt="Email" />
+  </a>
+  <a href="https://drive.google.com/file/d/1QdJ0GqlDd9ft0moKAfKePkIh_cKaUklA/view?usp=sharing">
+    <img src="https://img.shields.io/badge/Resume-10B981?style=for-the-badge&logo=readthedocs&logoColor=white" alt="Resume" />
+  </a>
+  <img src="https://komarev.com/ghpvc/?username=Binod231&label=Profile%20Views&color=0ea5e9&style=for-the-badge" alt="Profile Views" />
+</p>
+
+---
+
+### About Me — `whoami --devops`
+
+```yaml
+name: Binod Prasad Joshi
+role: DevOps Consultant @ Glovion Consulting Private Limited
+certifications:
+  - 2x AWS Certified
+  - AWS Community Builder (Dev Tools, 2026)
+  - Google Student Ambassador (Google DSC, 2026)
+location: Remote-friendly (UTC+5:45)
+focus:
+  - Multi-AZ AWS Cloud Architecture & ECS Fargate
+  - Private Cloud & Multi-Data Center Operations
+  - Enterprise ERP (Odoo) Lifecycle & PostgreSQL Tuning
+  - Automated CI/CD, FinOps (~30% Cost Reduction) & DevSecOps
+```
+
+---
+
+### Interactive DevOps & Cloud Architecture
+
+> Click any domain below to expand the production architecture, deliverables, and impact metrics.
+
+<details>
+<summary><b>[01] Cloud Architecture & Modernization</b> — <code>99.9% Uptime SLA Architecture</code></summary>
 <br/>
 
-```
- ██████╗ ██╗███╗   ██╗ ██████╗ ██████╗
- ██╔══██╗██║████╗  ██║██╔═══██╗██╔══██╗
- ██████╔╝██║██╔██╗ ██║██║   ██║██║  ██║
- ██╔══██╗██║██║╚██╗██║██║   ██║██║  ██║
- ██████╔╝██║██║ ╚████║╚██████╔╝██████╔╝
- ╚═════╝ ╚═╝╚═╝  ╚═══╝ ╚═════╝ ╚═════╝
-```
+- **Multi-AZ VPC & Subnet Topology**: Isolated public/private subnets, NAT Gateways, and secure ingress routing.
+- **Container Orchestration**: Production **ECS Fargate** & Docker workloads with zero-downtime rolling deployments.
+- **High-Availability Persistence**: **RDS PostgreSQL / MySQL Multi-AZ** clustering, Route 53 DNS, CloudFront CDN, and AWS WAF.
+- **Stack**: `AWS VPC` • `ECS Fargate` • `RDS Multi-AZ` • `Route 53` • `CloudFormation`
 
-[![Typing SVG](https://readme-typing-svg.demolab.com?font=JetBrains+Mono&weight=700&size=15&pause=1200&color=00D9FF&center=true&vCenter=true&width=580&lines=Cloud+%26+Backend+Engineer;AWS+Certified+Solutions+Architect;Shipping+production+systems+that+hold+up;FastAPI+%7C+Docker+%7C+PostgreSQL+%7C+Redis;Building+LLM+%26+RAG+pipelines+in+prod;AWS+Community+Builder+%C2%B7+Google+Ambassador)](https://git.io/typing-svg)
+</details>
 
-</div>
-
+<details>
+<summary><b>[02] DevOps & Automated CI/CD Pipelines</b> — <code>~50% Faster Pipeline Execution</code></summary>
 <br/>
 
+- **Enterprise GitHub Actions**: Automated build, test, lint, and deployment gates.
+- **Multi-Stage Docker Caching**: Cut container build times by ~50% with layer caching and slim runtime images.
+- **Zero-Downtime Rollouts**: ASG instance refresh & automated **Alembic** database schema migrations.
+- **Stack**: `GitHub Actions` • `Docker` • `Docker Compose` • `Alembic` • `Linux / Bash`
+
+</details>
+
+<details>
+<summary><b>[03] Cloud FinOps & Cost Optimization</b> — <code>~30% Monthly Cloud Bill Reduction</code></summary>
+<br/>
+
+- **Compute & Memory Rightsizing**: CloudWatch telemetry audits to eliminate overprovisioned EC2/ECS spend.
+- **Architecture Optimization**: Replaced high-cost services (e.g., OpenSearch) with tuned **PostgreSQL** indexing & **Redis ElastiCache**.
+- **Storage Lifecycle**: S3 Intelligent-Tiering and automated archival policies.
+- **Stack**: `AWS Cost Explorer` • `CloudWatch` • `Redis ElastiCache` • `PostgreSQL`
+
+</details>
+
+<details>
+<summary><b>[04] DevSecOps & Shift-Left Security</b> — <code>Zero Security Incident Track Record</code></summary>
+<br/>
+
+- **Edge & IAM Hardening**: AWS WAF rate-limiting, IP reputation lists, least-privilege IAM, and private subnet isolation.
+- **Shift-Left SAST**: Automated Static Application Security Testing integrated directly into CI/CD.
+- **Disaster Recovery**: Automated backup vaults with **AWS Backup**, **AWS Config**, and multi-location DR sync.
+- **Stack**: `AWS WAF` • `IAM` • `AWS Config` • `SAST` • `OAuth2 / JWT`
+
+</details>
+
+<details>
+<summary><b>[05] Generative AI & RAG Infrastructure</b> — <code>&lt;100ms API Response for Core Workflows</code></summary>
+<br/>
+
+- **Async AI Pipelines**: Decoupled long-running LLM inference using asynchronous task queues and S3 pre-signed workflows.
+- **Grounded RAG**: Production vector search with **pgvector** & **ChromaDB** integrated with **Amazon Bedrock**.
+- **Stack**: `Amazon Bedrock` • `AWS SAM` • `FastAPI Async` • `pgvector` • `ChromaDB`
+
+</details>
+
 ---
 
-```python
-class BinodPrasadJoshi:
-    location   = " Pokhara Nepal"
-    role       = "Devops Consultant"
-    education  = "B.Tech CS · IKGPTU · GPA 8.03 · May 2026"
-    recognitions = [
-        "AWS Community Builder — Dev Tools (2026)",
-        "Google Student Ambassador (2026)",
-        "AWS Certified Solutions Architect – Associate (SAA-C03)",
-        "AWS Certified Cloud Practitioner (CLF-C02)",
-        "NPTEL Elite + Silver — Cloud Computing & ML",
-    ]
-    contact    = "joshibinodprasad77@gmail.com"
-    portfolio  = "https://binodprasadjoshi.com.np"
-```
+### DevOps & Engineering Stack
+
+<p align="center">
+  <img src="https://skillicons.dev/icons?i=aws,docker,linux,githubactions,nginx,postgres,mysql,redis,python,fastapi,django,flask,git,bash,grafana,prometheus&perline=8" alt="Tech Stack" />
+</p>
+
+| Domain | Technologies |
+| :--- | :--- |
+| **Cloud & IaC** | `AWS (EC2, S3, RDS, ECS Fargate, IAM, WAF, CloudWatch, Bedrock)` • `CloudFormation` • `AWS SAM` • `Private Cloud` |
+| **CI/CD & Containers** | `GitHub Actions` • `Docker` • `Docker Compose` • `Nginx` • `Linux (Ubuntu/Debian)` • `Bash` |
+| **Observability & Ops** | `Prometheus` • `Grafana` • `CloudWatch` • `Multi-Data Center Monitoring` • `ERP (Odoo) Ops` |
+| **Backend & Data** | `Python` • `FastAPI` • `Django` • `Flask` • `PostgreSQL` • `MySQL` • `Redis` • `pgvector` • `ChromaDB` |
 
 ---
 
-## `> production_log.txt`
+### 3D Isometric Contribution Graph & Live Telemetry
 
-```diff
-+ 95% reduction in OAuth2 latency  —  Redis JWKS caching, diagnosed via distributed traces, zero downtime
-+ 99.9% uptime                     —  async FastAPI + SQLAlchemy, multi-tenant B2B/B2C on AWS EC2
-+ 1,000+ accounts automated        —  enterprise provisioning & anonymization via background jobs
-+ LLM pipelines shipped            —  multi-format doc processing, RAG + vector DB at Sabudh Foundation
-+ Multi-tenant SaaS deployed       —  RBAC, tenant-isolated APIs, real-time GPS ingestion pipeline
-+ Deployment runbooks authored     —  triage playbooks, integration checklists for repeatable rollouts
-```
-
----
-
-## `> stack --verbose`
-
-```
-┌─────────────────────────────────────────────────────────────┐
-│  CLOUD & INFRA                                              │
-│  AWS EC2 · S3 · RDS · IAM · CloudWatch · Docker · Linux     │
-├─────────────────────────────────────────────────────────────┤
-│  DEVOPS / CI/CD                                             │
-│  GitHub Actions · Docker Compose · Container Orchestration  │
-├─────────────────────────────────────────────────────────────┤
-│  BACKEND                                                    │
-│  FastAPI · Flask · Django · Async SQLAlchemy · OAuth2       │
-├─────────────────────────────────────────────────────────────┤
-│  DATABASES                                                  │
-│  PostgreSQL · MySQL · Redis · Vector Databases              │
-├─────────────────────────────────────────────────────────────┤
-│  AI / ML                                                    │
-│  LLM Pipelines · RAG · Multi-Agent Systems · Embeddings     │
-├─────────────────────────────────────────────────────────────┤
-│  DAILY TOOLING                                              │
-│  Claude Code · Cursor · Git · Swagger · Postman             │
-└─────────────────────────────────────────────────────────────┘
-```
+> Powered by GitHub Actions (`update-3d-contrib.yml`) — automatically rendered in 3D every day.
 
 <div align="center">
-
-![AWS](https://img.shields.io/badge/AWS-232F3E?style=flat-square&logo=amazon-aws&logoColor=FF9900)
-![Docker](https://img.shields.io/badge/Docker-2496ED?style=flat-square&logo=docker&logoColor=white)
-![FastAPI](https://img.shields.io/badge/FastAPI-009688?style=flat-square&logo=fastapi&logoColor=white)
-![Python](https://img.shields.io/badge/Python-3776AB?style=flat-square&logo=python&logoColor=white)
-![PostgreSQL](https://img.shields.io/badge/PostgreSQL-4169E1?style=flat-square&logo=postgresql&logoColor=white)
-![Redis](https://img.shields.io/badge/Redis-DC382D?style=flat-square&logo=redis&logoColor=white)
-![GitHub Actions](https://img.shields.io/badge/GitHub_Actions-2088FF?style=flat-square&logo=github-actions&logoColor=white)
-![Linux](https://img.shields.io/badge/Linux-FCC624?style=flat-square&logo=linux&logoColor=black)
-![Flask](https://img.shields.io/badge/Flask-000000?style=flat-square&logo=flask&logoColor=white)
-![Django](https://img.shields.io/badge/Django-092E20?style=flat-square&logo=django&logoColor=white)
-
-</div>
-
----
-
-## `> git log --oneline --all`
-
-```bash
-# [karnovation]
-a1b2c3d  feat: multi-tenant SaaS backend — RBAC, tenant-isolated APIs, AWS EC2
-b3c4d5e  perf: Redis JWKS caching → 95% OAuth2 latency drop, zero downtime
-c5d6e7f  ops:  background jobs for 1,000+ enterprise account provisioning
-d7e8f9a  cicd: GitHub Actions pipeline + Docker deployment on AWS EC2
-
-# [sabudh-foundation]
-e9f0a1b  feat: LLM document pipeline — multi-format, fully automated
-f1a2b3c  feat: RAG pipeline + vector DB for semantic enterprise search
-g3b4c5d  feat: multi-agent summarization — reduced manual processing overhead
-
-# [side-projects]
-h5c6d7e  feat: school-bus-mgmt — real-time GPS ingestion, multi-tenant SaaS
-i7d8e9f  feat: stores-rest-api — JWT auth, Redis sessions, Swagger docs, Docker
-```
-
----
-
-## `> certifications --verify`
-
-| Status | Credential | Issuer | Valid |
-|:---:|---|---|:---:|
-| ✅ | **[AWS Solutions Architect – Associate (SAA-C03)](https://www.credly.com/badges/4fe1dc98-121e-41ed-a1b1-0d611ef6b6ac/public_url)** | Amazon Web Services | 2029 |
-| ✅ | **[AWS Cloud Practitioner (CLF-C02)](https://www.credly.com/badges/f31fbcf5-1fdc-4f17-9f1b-41d7a1973d5c/linked_in_profile)** | Amazon Web Services | 2028 |
-| ✅ | **AWS Community Builder — Dev Tools** | Amazon Web Services | 2026– |
-| ✅ | **Google Student Ambassador** | Google | 2026– |
-| ✅ | **NPTEL Elite + Silver Award** | Cloud Computing & ML | — |
-| ✅ | **Top SQL 50 Badge** | LeetCode | — |
-| ✅ | **AWS Academy Graduate** | Cloud Foundations | 2025 |
-
----
-
-## `> stats --user Binod231`
-
-<div align="center">
-
-![GitHub Stats](https://github-readme-stats.vercel.app/api?username=Binod231&show_icons=true&theme=tokyonight&hide_border=true&bg_color=0d1117&title_color=00D9FF&icon_color=00D9FF&text_color=c9d1d9&rank_icon=github)
-&nbsp;
-![Top Langs](https://github-readme-stats.vercel.app/api/top-langs/?username=Binod231&layout=compact&theme=tokyonight&hide_border=true&bg_color=0d1117&title_color=00D9FF&text_color=c9d1d9)
-
-![Streak](https://streak-stats.demolab.com?user=Binod231&theme=tokyonight&hide_border=true&background=0d1117&stroke=00D9FF&ring=00D9FF&fire=FF6B6B&currStreakLabel=00D9FF&dates=8b949e)
-
-</div>
-
----
-
-## `> connect --handshake`
-
-<div align="center">
-
-[![Portfolio](https://img.shields.io/badge/binodprasadjoshi.com.np-000000?style=for-the-badge&logo=vercel&logoColor=00D9FF)](https://binodprasadjoshi.com.np)
-[![LinkedIn](https://img.shields.io/badge/LinkedIn-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white)](https://linkedin.com/in/binod-prasad-joshi-549067281)
-[![GitHub](https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/Binod231)
-[![Email](https://img.shields.io/badge/joshibinodprasad77@gmail.com-EA4335?style=for-the-badge&logo=gmail&logoColor=white)](mailto:joshibinodprasad77@gmail.com)
-
+  <img src="./profile-3d-contrib/profile-night-rainbow.svg" alt="3D GitHub Contributions" width="100%" />
 </div>
 
 <br/>
 
 <div align="center">
-<img src="https://komarev.com/ghpvc/?username=Binod231&style=flat-square&color=00D9FF&label=PROFILE+VIEWS" alt="Profile views" />
+  <img src="https://github-readme-stats.vercel.app/api?username=Binod231&show_icons=true&theme=tokyonight&hide_border=true&bg_color=0d1117&title_color=38bdf8&icon_color=38bdf8&text_color=cbd5e1" alt="Binod's GitHub Stats" height="175" />
+  <img src="https://github-readme-streak-stats.herokuapp.com/?user=Binod231&theme=tokyonight&hide_border=true&background=0d1117&ring=38bdf8&fire=f59e0b&currStreakLabel=38bdf8" alt="GitHub Streak" height="175" />
 </div>
 
 <br/>
 
 <div align="center">
-
-```
-// systems don't lie. logs don't lie. ship → measure → fix → repeat.
-```
-
+  <img src="https://github-readme-activity-graph.vercel.app/graph?username=Binod231&theme=tokyo-night&bg_color=0d1117&color=38bdf8&line=38bdf8&point=f59e0b&area=true&hide_border=true" alt="Contribution Activity Graph" width="95%" />
 </div>
+
+---
+
+<p align="center">
+  <sub>Crafted with DevOps precision • Open to Cloud &amp; DevOps Consulting</sub>
+</p>
+

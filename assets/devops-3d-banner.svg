@@ -1,0 +1,157 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 320" width="100%" height="320">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#090d16"/>
+      <stop offset="50%" stop-color="#0f172a"/>
+      <stop offset="100%" stop-color="#090d16"/>
+    </linearGradient>
+    <linearGradient id="cyanGlow" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#06b6d4"/>
+      <stop offset="50%" stop-color="#3b82f6"/>
+      <stop offset="100%" stop-color="#8b5cf6"/>
+    </linearGradient>
+    <linearGradient id="cubeTop" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#38bdf8" stop-opacity="0.9"/>
+      <stop offset="100%" stop-color="#0284c7" stop-opacity="0.8"/>
+    </linearGradient>
+    <linearGradient id="cubeLeft" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#0369a1" stop-opacity="0.85"/>
+      <stop offset="100%" stop-color="#0c4a6e" stop-opacity="0.9"/>
+    </linearGradient>
+    <linearGradient id="cubeRight" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#1e40af" stop-opacity="0.85"/>
+      <stop offset="100%" stop-color="#1e1b4b" stop-opacity="0.95"/>
+    </linearGradient>
+    <linearGradient id="awsOrange" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#f59e0b"/>
+      <stop offset="100%" stop-color="#ea580c"/>
+    </linearGradient>
+    <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="4" result="blur"/>
+      <feComposite in="SourceGraphic" in2="blur" operator="over"/>
+    </filter>
+    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#1e293b" stroke-width="0.7" opacity="0.5"/>
+    </pattern>
+  </defs>
+
+  <style>
+    @keyframes float1 {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-10px); }
+    }
+    @keyframes float2 {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(8px); }
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 0.4; }
+      50% { opacity: 1; }
+    }
+    @keyframes dash {
+      to { stroke-dashoffset: -40; }
+    }
+    .cube-float-1 { animation: float1 4.5s ease-in-out infinite; }
+    .cube-float-2 { animation: float2 5.5s ease-in-out infinite; }
+    .pulse-node { animation: pulse 2.5s ease-in-out infinite; }
+    .data-flow {
+      stroke-dasharray: 6 6;
+      animation: dash 1.8s linear infinite;
+    }
+  </style>
+
+  <!-- Background -->
+  <rect width="1200" height="320" rx="16" fill="url(#bgGrad)"/>
+  <rect width="1200" height="320" rx="16" fill="url(#grid)"/>
+
+  <!-- Subtle Glow Orbs -->
+  <circle cx="200" cy="80" r="140" fill="#06b6d4" opacity="0.06"/>
+  <circle cx="1000" cy="240" r="160" fill="#8b5cf6" opacity="0.07"/>
+
+  <!-- Top Terminal Bar -->
+  <rect x="28" y="22" width="1144" height="34" rx="8" fill="#0f172a" stroke="#1e293b" stroke-width="1"/>
+  <circle cx="48" cy="39" r="5.5" fill="#ef4444"/>
+  <circle cx="66" cy="39" r="5.5" fill="#f59e0b"/>
+  <circle cx="84" cy="39" r="5.5" fill="#10b981"/>
+  <text x="108" y="43" font-family="monospace" font-size="12" fill="#94a3b8">binod@devops-cloud:~/infrastructure$ kubectl get nodes --all-namespaces</text>
+  <rect x="1035" y="29" width="122" height="20" rx="10" fill="#064e3b" stroke="#10b981" stroke-width="0.8"/>
+  <circle cx="1048" cy="39" r="3.5" fill="#34d399" class="pulse-node"/>
+  <text x="1058" y="43" font-family="monospace" font-size="10.5" fill="#6ee7b7" font-weight="bold">99.9% SLA UP</text>
+
+  <!-- Left Content: Name & Role -->
+  <text x="48" y="118" font-family="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="42" font-weight="800" fill="#f8fafc" letter-spacing="-0.5">
+    Binod Prasad Joshi
+  </text>
+  <rect x="48" y="132" width="380" height="3.5" rx="2" fill="url(#cyanGlow)"/>
+
+  <text x="48" y="166" font-family="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="18" font-weight="600" fill="#38bdf8">
+    Cloud &amp; DevOps Consultant  •  2x AWS Certified  •  AWS Community Builder
+  </text>
+
+  <text x="48" y="198" font-family="monospace" font-size="13.5" fill="#94a3b8">
+    Architecting resilient Multi-AZ AWS infrastructure, automated CI/CD,
+  </text>
+  <text x="48" y="218" font-family="monospace" font-size="13.5" fill="#94a3b8">
+    FinOps cost optimization &amp; shift-left DevSecOps pipelines.
+  </text>
+
+  <!-- Metric Pills (No Emojis, Clean Status Dots) -->
+  <g transform="translate(48, 245)">
+    <rect x="0" y="0" width="160" height="32" rx="8" fill="#1e293b" stroke="#334155" stroke-width="1"/>
+    <circle cx="16" cy="16" r="4" fill="#38bdf8" class="pulse-node"/>
+    <text x="28" y="20" font-family="monospace" font-size="12" fill="#38bdf8" font-weight="bold">~50% Faster CI/CD</text>
+
+    <rect x="172" y="0" width="170" height="32" rx="8" fill="#1e293b" stroke="#334155" stroke-width="1"/>
+    <circle cx="188" cy="16" r="4" fill="#34d399" class="pulse-node"/>
+    <text x="200" y="20" font-family="monospace" font-size="12" fill="#34d399" font-weight="bold">~30% FinOps Saved</text>
+
+    <rect x="354" y="0" width="174" height="32" rx="8" fill="#1e293b" stroke="#334155" stroke-width="1"/>
+    <circle cx="370" cy="16" r="4" fill="#fbbf24" class="pulse-node"/>
+    <text x="382" y="20" font-family="monospace" font-size="12" fill="#fbbf24" font-weight="bold">Zero-Downtime Ops</text>
+  </g>
+
+  <!-- Right Side: 3D Isometric Cloud & Container Cluster -->
+  <g transform="translate(760, 70)">
+    <!-- Isometric Base Grid -->
+    <polygon points="200,190 360,115 200,40 40,115" fill="#0f172a" stroke="#1e293b" stroke-width="1.5"/>
+    <polygon points="200,190 360,115 200,40 40,115" fill="none" stroke="#38bdf8" stroke-width="0.6" opacity="0.35"/>
+
+    <!-- Data Flow Lines -->
+    <line x1="120" y1="125" x2="200" y2="95" stroke="#38bdf8" stroke-width="2" class="data-flow"/>
+    <line x1="200" y1="95" x2="280" y2="125" stroke="#8b5cf6" stroke-width="2" class="data-flow"/>
+    <line x1="200" y1="95" x2="200" y2="155" stroke="#10b981" stroke-width="2" class="data-flow"/>
+
+    <!-- Center 3D Cube (AWS / Cloud Core) -->
+    <g class="cube-float-1" filter="url(#glow)">
+      <polygon points="200,55 245,77 200,99 155,77" fill="url(#awsOrange)"/>
+      <polygon points="155,77 200,99 200,145 155,123" fill="#c2410c"/>
+      <polygon points="245,77 200,99 200,145 245,123" fill="#9a3412"/>
+      <text x="183" y="81" font-family="monospace" font-size="11" font-weight="bold" fill="#fff">AWS</text>
+    </g>
+
+    <!-- Left 3D Cube (Docker / Containers) -->
+    <g class="cube-float-2">
+      <polygon points="110,105 145,122 110,139 75,122" fill="url(#cubeTop)"/>
+      <polygon points="75,122 110,139 110,175 75,158" fill="url(#cubeLeft)"/>
+      <polygon points="145,122 110,139 110,175 145,158" fill="url(#cubeRight)"/>
+      <text x="92" y="126" font-family="monospace" font-size="9.5" font-weight="bold" fill="#fff">K8s</text>
+    </g>
+
+    <!-- Right 3D Cube (CI/CD Pipeline) -->
+    <g class="cube-float-2">
+      <polygon points="290,105 325,122 290,139 255,122" fill="#a78bfa"/>
+      <polygon points="255,122 290,139 290,175 255,158" fill="#6d28d9"/>
+      <polygon points="325,122 290,139 290,175 325,158" fill="#4c1d95"/>
+      <text x="271" y="126" font-family="monospace" font-size="9.5" font-weight="bold" fill="#fff">CI/CD</text>
+    </g>
+
+    <!-- Front 3D Cube (Observability) -->
+    <g class="cube-float-1">
+      <polygon points="200,145 232,160 200,175 168,160" fill="#34d399"/>
+      <polygon points="168,160 200,175 200,205 168,190" fill="#059669"/>
+      <polygon points="232,160 200,175 200,205 232,190" fill="#065f46"/>
+      <text x="184" y="164" font-family="monospace" font-size="9" font-weight="bold" fill="#fff">OPS</text>
+    </g>
+  </g>
+</svg>
+
