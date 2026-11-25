@@ -14,7 +14,7 @@
   <a href="https://binodprasadjoshi.com.np"><img src="https://img.shields.io/badge/%24-portfolio-38bdf8?style=flat-square&labelColor=300a24" alt="Portfolio" /></a>
   <a href="https://www.linkedin.com/in/binod-prasad-joshi-549067281"><img src="https://img.shields.io/badge/%24-linkedin-729fcf?style=flat-square&labelColor=300a24" alt="LinkedIn" /></a>
   <a href="https://www.credly.com/badges/4fe1dc98-121e-41ed-a1b1-0d611ef6b6ac/public_url"><img src="https://img.shields.io/badge/%24-aws__saa-f59e0b?style=flat-square&labelColor=300a24" alt="AWS SAA" /></a>
-  <a href="https://drive.google.com/file/d/1QdJ0GqlDd9ft0moKAfKePkIh_cKaUklA/view?usp=sharing"><img src="https://img.shields.io/badge/%24-resume-ad7fa8?style=flat-square&labelColor=300a24" alt="Resume" /></a>
+  <a href="https://drive.google.com/file/d/1aCP_dh8pSJ2Vy_KncT_PfvOj3z5LHWPf/view?usp=sharing"><img src="https://img.shields.io/badge/%24-resume-ad7fa8?style=flat-square&labelColor=300a24" alt="Resume" /></a>
 </p>
 
 ---
