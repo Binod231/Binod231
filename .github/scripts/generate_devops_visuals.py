@@ -153,9 +153,9 @@ def generate_banner(total_str: str):
     svg = f"""<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 340" width="100%" height="340">
   <defs>
     <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#050811"/>
-      <stop offset="50%" stop-color="#0b1324"/>
-      <stop offset="100%" stop-color="#050811"/>
+      <stop offset="0%" stop-color="#0d1117"/>
+      <stop offset="50%" stop-color="#111927"/>
+      <stop offset="100%" stop-color="#0d1117"/>
     </linearGradient>
     <linearGradient id="neonBar" x1="0%" y1="0%" x2="100%" y2="0%">
       <stop offset="0%" stop-color="#10b981"/>
@@ -374,8 +374,8 @@ def generate_3d_isometric_contrib(total_str: str, weeks: list):
     svg = f"""<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1120 400" width="100%" height="400">
   <defs>
     <linearGradient id="skyBg" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#050811"/>
-      <stop offset="100%" stop-color="#0a1324"/>
+      <stop offset="0%" stop-color="#0d1117"/>
+      <stop offset="100%" stop-color="#111927"/>
     </linearGradient>
     <pattern id="isoGrid" width="28" height="28" patternUnits="userSpaceOnUse">
       <path d="M 28 0 L 0 0 0 28" fill="none" stroke="#132038" stroke-width="0.6"/>
@@ -461,8 +461,8 @@ def generate_arcade_game(total_str: str, weeks: list):
     svg = f"""<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1120 330" width="100%" height="330">
   <defs>
     <linearGradient id="arcBg" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#04070e"/>
-      <stop offset="100%" stop-color="#0a101d"/>
+      <stop offset="0%" stop-color="#0d1117"/>
+      <stop offset="100%" stop-color="#111927"/>
     </linearGradient>
   </defs>
   <style>
