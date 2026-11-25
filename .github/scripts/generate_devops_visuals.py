@@ -1,18 +1,21 @@
 #!/usr/bin/env python3
 """
-Generates three self-contained, animated SVGs for Binod231's GitHub Profile:
-  1. assets/devops-3d-banner.svg        - Terminal HUD + 3D dot-matrix portrait + 3D isometric cluster
-  2. assets/3d-isometric-contrib.svg   - 3D Isometric Contribution Skyline from live GitHub data
-  3. assets/devops-arcade-game.svg     - Gamified DevOps Terminal Invaders over real contribution grid
+Generates live, self-contained visuals for Binod231's GitHub Profile:
+  1. assets/avatar-circle.png          - Circular headshot with glowing cyber rings
+  2. assets/ubuntu-terminal-profile.svg - Authentic Ubuntu GNOME Terminal outer window + live metrics + 3D dot portrait + 3D cubes
+  3. assets/3d-isometric-contrib.svg   - 3D Isometric Contribution Skyline from live GitHub data
+  4. assets/devops-racer-preview.svg   - AWS DevOps 3D Highway Racer preview inside Ubuntu terminal frame
 """
 
+import datetime
 import html
+import json
 import math
 import os
 import re
 import urllib.request
 from pathlib import Path
-from PIL import Image, ImageDraw, ImageEnhance, ImageFilter, ImageOps
+from PIL import Image, ImageDraw, ImageFilter
 
 USERNAME = os.environ.get("GITHUB_USERNAME", "Binod231")
 ROOT = Path(__file__).resolve().parents[2]
@@ -20,20 +23,32 @@ ASSETS_DIR = ROOT / "assets"
 ASSETS_DIR.mkdir(parents=True, exist_ok=True)
 
 
-def fetch_contributions(username: str):
-    """Fetch contribution grid (weeks x 7 days) and total count from GitHub."""
+def fetch_github_stats(username: str):
+    """Fetch public repo count, follower count, and contribution grid from GitHub."""
+    repos, followers = 45, 3
+    try:
+        req = urllib.request.Request(
+            f"https://api.github.com/users/{username}",
+            headers={"User-Agent": "DevOpsProfileBot/2.0"},
+        )
+        with urllib.request.urlopen(req, timeout=15) as resp:
+            data = json.loads(resp.read().decode("utf-8", errors="ignore"))
+            repos = data.get("public_repos", repos)
+            followers = data.get("followers", followers)
+    except Exception as exc:
+        print(f"Warning: user API fetch failed ({exc})")
+
     url = f"https://github.com/users/{username}/contributions"
     req = urllib.request.Request(
         url,
-        headers={"User-Agent": "Mozilla/5.0 (compatible; DevOpsProfileBot/1.0)"},
+        headers={"User-Agent": "Mozilla/5.0 (compatible; DevOpsProfileBot/2.0)"},
     )
     with urllib.request.urlopen(req, timeout=20) as resp:
         body = resp.read().decode("utf-8", errors="ignore")
 
     total_match = re.search(r"([\d,]+)\s+contributions\s+in the last year", body)
-    total_str = total_match.group(1) if total_match else "1,250"
+    total_str = total_match.group(1) if total_match else "1,255"
 
-    # Extract tooltips: id -> count
     tooltip_counts = {}
     for m in re.finditer(
         r'for="(contribution-day-component-\d+-\d+)"[^>]*>([^<]+)</tool-tip>',
@@ -43,8 +58,7 @@ def fetch_contributions(username: str):
         num_m = re.search(r"(\d+)\s+contribution", text)
         tooltip_counts[comp_id] = int(num_m.group(1)) if num_m else 0
 
-    # Extract cells
-    grid = {}  # (col, row) -> (level, count, date)
+    grid = {}
     max_col = 0
     for m in re.finditer(
         r'<td[^>]*data-date="([^"]+)"[^>]*id="(contribution-day-component-(\d+)-(\d+))"[^>]*data-level="(\d)"',
@@ -62,16 +76,13 @@ def fetch_contributions(username: str):
 
     weeks = []
     for c in range(max_col + 1):
-        week = []
-        for r in range(7):
-            week.append(grid.get((c, r), (0, 0, "")))
-        weeks.append(week)
+        weeks.append([grid.get((c, r), (0, 0, "")) for r in range(7)])
 
-    return total_str, weeks
+    return repos, followers, total_str, weeks
 
 
 def generate_circular_avatar(img_path: Path):
-    """Create a transparent circular PNG avatar with a glowing cyan/emerald cyber ring."""
+    """Create a transparent circular PNG avatar with Ubuntu/cyber rings."""
     if not img_path.exists():
         return
     size = 280
@@ -88,15 +99,14 @@ def generate_circular_avatar(img_path: Path):
 
     canvas = Image.new("RGBA", (size, size), (0, 0, 0, 0))
     draw = ImageDraw.Draw(canvas)
-    # Outer cyber rings
-    draw.ellipse((2, 2, size - 3, size - 3), outline=(56, 189, 248, 220), width=3)
-    draw.ellipse((6, 6, size - 7, size - 7), outline=(16, 185, 129, 200), width=2)
+    draw.ellipse((2, 2, size - 3, size - 3), outline=(138, 226, 52, 220), width=3)
+    draw.ellipse((6, 6, size - 7, size - 7), outline=(56, 189, 248, 200), width=2)
     canvas.paste(im, (8, 8), im)
     canvas.save(ASSETS_DIR / "avatar-circle.png", "PNG")
 
 
-def build_dot_matrix_portrait(img_path: Path, cx: int, cy: int, radius: int = 86) -> str:
-    """Convert studio headshot into a crisp 3D cyber halftone dot-matrix portrait."""
+def build_dot_matrix_portrait(img_path: Path, cx: int, cy: int, radius: int = 66) -> str:
+    """Convert studio headshot into a crisp 3D halftone dot-matrix portrait."""
     if not img_path.exists():
         return ""
 
@@ -107,7 +117,7 @@ def build_dot_matrix_portrait(img_path: Path, cx: int, cy: int, radius: int = 86
     top = max(0, int((h - side) * 0.06))
     im = im.crop((left, top, left + side, top + side))
 
-    grid_n = 32
+    grid_n = 28
     gray = im.resize((grid_n, grid_n), Image.Resampling.LANCZOS)
     edges = gray.filter(ImageFilter.FIND_EDGES)
     px = gray.load()
@@ -128,27 +138,25 @@ def build_dot_matrix_portrait(img_path: Path, cx: int, cy: int, radius: int = 86
 
             raw = px[gx, gy]
             edge = epx[gx, gy] / 255.0
-            # Filter out bright studio backdrop (> 218) unless it's a sharp edge
             if raw > 218 and edge < 0.25:
                 continue
 
-            # Map subject features: combine skin/face highlights + edge contours
             lum = raw / 255.0
             sphere = math.sqrt(max(0.0, 1.0 - dist * dist))
             intensity = min(1.0, max(0.18, (1.0 - lum) * 0.55 + edge * 0.85 + (0.35 if 0.28 < lum < 0.82 else 0.0)))
-            r_dot = (0.7 + intensity * 1.75) * (0.82 + 0.22 * sphere)
+            r_dot = (0.55 + intensity * 1.45) * (0.82 + 0.22 * sphere)
 
             x = start_x + gx * step
             y = start_y + gy * step
             if edge > 0.35 or (0.42 < lum < 0.80):
-                color = "#e0f2fe" if edge > 0.45 else "#38bdf8"
+                color = "#eeeeec" if edge > 0.45 else "#8ae234"
                 opacity = f"{min(1.0, 0.65 + intensity * 0.35):.2f}"
             elif lum <= 0.42:
-                color = "#10b981"
+                color = "#38bdf8"
                 opacity = "0.78"
             else:
-                color = "#0ea5e9"
-                opacity = "0.52"
+                color = "#4e9a06"
+                opacity = "0.55"
 
             dots.append(
                 f'<circle cx="{x:.1f}" cy="{y:.1f}" r="{r_dot:.2f}" fill="{color}" opacity="{opacity}"/>'
@@ -157,202 +165,148 @@ def build_dot_matrix_portrait(img_path: Path, cx: int, cy: int, radius: int = 86
     return "\n      ".join(dots)
 
 
-def generate_banner(total_str: str):
-    portrait_dots = build_dot_matrix_portrait(ASSETS_DIR / "profile.jpeg", cx=150, cy=182, radius=88)
+def generate_ubuntu_terminal(repos: int, followers: int, total_str: str, weeks: list):
+    """Generate authentic Ubuntu GNOME Terminal outer window with live stats, inline graph, and 3D visuals."""
+    now_str = datetime.datetime.now(datetime.timezone.utc).strftime("%d %b %Y, %H:%M:%S UTC")
+    portrait_dots = build_dot_matrix_portrait(ASSETS_DIR / "profile.jpeg", cx=985, cy=135, radius=68)
 
-    # Orbital tech nodes around portrait
-    orbit_labels = [
-        (56, 128, "AWS", "#f59e0b"),
-        (246, 128, "K8S", "#38bdf8"),
-        (56, 236, "OPS", "#10b981"),
-        (246, 236, "AI", "#a78bfa"),
-    ]
-    orbit_nodes = []
-    for ox, oy, lbl, col in orbit_labels:
-        orbit_nodes.append(
-            f'<g class="pulse-slow">'
-            f'<circle cx="{ox}" cy="{oy}" r="14" fill="#09111f" stroke="{col}" stroke-width="1.3"/>'
-            f'<text x="{ox}" y="{oy+3.5}" text-anchor="middle" font-family="monospace" font-size="8.5" font-weight="bold" fill="{col}">{lbl}</text>'
-            f"</g>"
-        )
+    # Build inline contribution intensity strip (last 20 weeks) like lowlighter metrics '#' blocks
+    recent = weeks[-20:] if len(weeks) >= 20 else weeks
+    hash_spans = []
+    level_cols = {0: "#555753", 1: "#4e9a06", 2: "#73d216", 3: "#8ae234", 4: "#38bdf8"}
+    for w in recent:
+        peak = max(day[0] for day in w)
+        col = level_cols.get(peak, "#555753")
+        hash_spans.append(f'<tspan fill="{col}">#</tspan>')
+    inline_graph = "".join(hash_spans)
 
-    svg = f"""<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 340" width="100%" height="340">
+    svg = f"""<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1160 400" width="100%" height="400">
   <defs>
-    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#0d1117"/>
-      <stop offset="50%" stop-color="#111927"/>
-      <stop offset="100%" stop-color="#0d1117"/>
+    <linearGradient id="ubuBg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#300a24"/>
+      <stop offset="100%" stop-color="#22071a"/>
     </linearGradient>
-    <linearGradient id="neonBar" x1="0%" y1="0%" x2="100%" y2="0%">
-      <stop offset="0%" stop-color="#10b981"/>
-      <stop offset="50%" stop-color="#38bdf8"/>
-      <stop offset="100%" stop-color="#8b5cf6"/>
+    <linearGradient id="titleBar" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#484642"/>
+      <stop offset="100%" stop-color="#2c2b29"/>
     </linearGradient>
     <linearGradient id="awsTop" x1="0%" y1="0%" x2="100%" y2="100%">
       <stop offset="0%" stop-color="#fbbf24"/>
-      <stop offset="100%" stop-color="#ea580c"/>
+      <stop offset="100%" stop-color="#e95420"/>
     </linearGradient>
-    <linearGradient id="cyanTop" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#67e8f9"/>
-      <stop offset="100%" stop-color="#0284c7"/>
-    </linearGradient>
-    <pattern id="cyberGrid" width="32" height="32" patternUnits="userSpaceOnUse">
-      <path d="M 32 0 L 0 0 0 32" fill="none" stroke="#162238" stroke-width="0.7"/>
-    </pattern>
-    <filter id="neonGlow" x="-25%" y="-25%" width="150%" height="150%">
-      <feGaussianBlur stdDeviation="3.5" result="blur"/>
-      <feComposite in="SourceGraphic" in2="blur" operator="over"/>
-    </filter>
   </defs>
-
   <style>
-    @keyframes floatA {{ 0%, 100% {{ transform: translateY(0px); }} 50% {{ transform: translateY(-9px); }} }}
-    @keyframes floatB {{ 0%, 100% {{ transform: translateY(0px); }} 50% {{ transform: translateY(7px); }} }}
-    @keyframes pulseSlow {{ 0%, 100% {{ opacity: 0.55; }} 50% {{ opacity: 1; }} }}
+    @keyframes blink {{ 0%, 49% {{ opacity: 1; }} 50%, 100% {{ opacity: 0; }} }}
+    @keyframes float3d {{ 0%, 100% {{ transform: translateY(0px); }} 50% {{ transform: translateY(-7px); }} }}
     @keyframes spinRing {{ from {{ transform: rotate(0deg); }} to {{ transform: rotate(360deg); }} }}
-    @keyframes spinRev {{ from {{ transform: rotate(360deg); }} to {{ transform: rotate(0deg); }} }}
-    @keyframes dashFlow {{ to {{ stroke-dashoffset: -44; }} }}
-    @keyframes scanY {{ 0% {{ transform: translateY(62px); opacity: 0.15; }} 50% {{ opacity: 0.45; }} 100% {{ transform: translateY(310px); opacity: 0.05; }} }}
-    .float-a {{ animation: floatA 4.2s ease-in-out infinite; }}
-    .float-b {{ animation: floatB 5.0s ease-in-out infinite; }}
-    .pulse-slow {{ animation: pulseSlow 2.6s ease-in-out infinite; }}
-    .spin-ring {{ transform-origin: 150px 182px; animation: spinRing 26s linear infinite; }}
-    .spin-rev {{ transform-origin: 150px 182px; animation: spinRev 18s linear infinite; }}
-    .data-line {{ stroke-dasharray: 6 5; animation: dashFlow 1.5s linear infinite; }}
-    .scanline {{ animation: scanY 4.5s linear infinite; }}
+    .cursor {{ animation: blink 1.1s infinite; }}
+    .cube-float {{ animation: float3d 4s ease-in-out infinite; }}
+    .spin-hud {{ transform-origin: 985px 135px; animation: spinRing 24s linear infinite; }}
   </style>
 
-  <!-- Base Frame -->
-  <rect width="1200" height="340" rx="14" fill="url(#bgGrad)" stroke="#1e293b" stroke-width="1.5"/>
-  <rect width="1200" height="340" rx="14" fill="url(#cyberGrid)"/>
+  <!-- Ubuntu Terminal Outer Window -->
+  <rect width="1160" height="400" rx="10" fill="url(#ubuBg)" stroke="#4c4a46" stroke-width="1.5"/>
 
-  <!-- Ambient Glows -->
-  <circle cx="150" cy="182" r="120" fill="#0ea5e9" opacity="0.09"/>
-  <circle cx="1010" cy="185" r="145" fill="#10b981" opacity="0.06"/>
+  <!-- GNOME Title Bar -->
+  <path d="M 10,0 L 1150,0 Q 1160,0 1160,10 L 1160,34 L 0,34 L 0,10 Q 0,0 10,0 Z" fill="url(#titleBar)"/>
+  <text x="580" y="21" text-anchor="middle" font-family="system-ui, -apple-system, 'Ubuntu', sans-serif" font-size="13" font-weight="600" fill="#eeeeec">binod@aws-cloud: ~</text>
 
-  <!-- Animated Scanline -->
-  <rect x="20" y="0" width="1160" height="2" fill="url(#neonBar)" opacity="0.25" class="scanline"/>
+  <!-- Top-Right Ubuntu Window Controls (-, square, orange X) -->
+  <g transform="translate(1082, 17)">
+    <circle cx="0" cy="0" r="8" fill="#3c3b37" stroke="#555753" stroke-width="0.8"/>
+    <line x1="-3.5" y1="2" x2="3.5" y2="2" stroke="#eeeeec" stroke-width="1.4"/>
+    <circle cx="24" cy="0" r="8" fill="#3c3b37" stroke="#555753" stroke-width="0.8"/>
+    <rect x="20.5" y="-3.5" width="7" height="7" fill="none" stroke="#eeeeec" stroke-width="1.2"/>
+    <circle cx="48" cy="0" r="8.5" fill="#e95420"/>
+    <line x1="44.8" y1="-3.2" x2="51.2" y2="3.2" stroke="#ffffff" stroke-width="1.5"/>
+    <line x1="51.2" y1="-3.2" x2="44.8" y2="3.2" stroke="#ffffff" stroke-width="1.5"/>
+  </g>
 
-  <!-- Terminal Header Bar -->
-  <rect x="20" y="16" width="1160" height="34" rx="8" fill="#09111f" stroke="#1e293b" stroke-width="1"/>
-  <circle cx="40" cy="33" r="5.5" fill="#ef4444"/>
-  <circle cx="58" cy="33" r="5.5" fill="#f59e0b"/>
-  <circle cx="76" cy="33" r="5.5" fill="#10b981"/>
-  <text x="98" y="37" font-family="monospace" font-size="12.5" fill="#34d399" font-weight="bold">root@binod-cloud:~#</text>
-  <text x="248" y="37" font-family="monospace" font-size="12.5" fill="#cbd5e1">./boot_devops_hud.sh --profile=dot3d --gamify=on --sla=99.9</text>
-  <rect x="978" y="23" width="190" height="20" rx="10" fill="#052e16" stroke="#10b981" stroke-width="0.9"/>
-  <circle cx="992" cy="33" r="3.5" fill="#34d399" class="pulse-slow"/>
-  <text x="1003" y="37" font-family="monospace" font-size="10.5" fill="#6ee7b7" font-weight="bold">99.9% SLA | {html.escape(total_str)} COMMITS</text>
+  <!-- Left Terminal Text Session -->
+  <g font-family="'Ubuntu Mono', 'JetBrains Mono', monospace" font-size="14.5">
+    <text x="24" y="64" fill="#d3d7cf" opacity="0.88">Binod231 DevOps Terminal OS 2026.11 LTS (AWS / Private Cloud)</text>
+    <text x="24" y="84" fill="#d3d7cf" opacity="0.88">Last synced: {html.escape(now_str)} | Live GitHub Telemetry</text>
 
-  <!-- LEFT: 3D Holographic Dot-Matrix Portrait -->
+    <!-- Prompt 1: whoami -->
+    <text x="24" y="118">
+      <tspan fill="#8ae234" font-weight="bold">binod@aws-cloud</tspan><tspan fill="#eeeeec">:</tspan><tspan fill="#729fcf" font-weight="bold">~</tspan><tspan fill="#eeeeec">$ whoami</tspan>
+    </text>
+    <text x="24" y="140" fill="#eeeeec">
+      <tspan font-weight="bold" fill="#ffffff">Binod Prasad Joshi</tspan> role="Cloud &amp; DevOps Consultant", guild="Glovion Consulting"
+    </text>
+    <text x="42" y="160" fill="#eeeeec">
+      contributed to <tspan font-weight="bold" fill="#8ae234">{repos}</tspan> repositories ({html.escape(total_str)} commits/yr) {inline_graph}
+    </text>
+    <text x="42" y="180" fill="#eeeeec">
+      verified=[<tspan fill="#fbbf24">AWS SAA-C03</tspan>, <tspan fill="#38bdf8">AWS CLF-C02</tspan>, <tspan fill="#8ae234">AWS Community Builder 2026</tspan>] | followers=<tspan font-weight="bold">{followers}</tspan>
+    </text>
+
+    <!-- Prompt 2: ./metrics --prod -->
+    <text x="24" y="214">
+      <tspan fill="#8ae234" font-weight="bold">binod@aws-cloud</tspan><tspan fill="#eeeeec">:</tspan><tspan fill="#729fcf" font-weight="bold">~</tspan><tspan fill="#eeeeec">$ ./metrics.sh --prod-impact</tspan>
+    </text>
+    <text x="42" y="236" fill="#d3d7cf">uptime_sla=<tspan fill="#8ae234" font-weight="bold">99.9%</tspan>  cicd_speedup=<tspan fill="#38bdf8" font-weight="bold">~50%</tspan>  finops_saved=<tspan fill="#fbbf24" font-weight="bold">-30%</tspan>  oauth2_latency=<tspan fill="#8ae234" font-weight="bold">-95%</tspan></text>
+
+    <!-- Prompt 3: help -->
+    <text x="24" y="270">
+      <tspan fill="#8ae234" font-weight="bold">binod@aws-cloud</tspan><tspan fill="#eeeeec">:</tspan><tspan fill="#729fcf" font-weight="bold">~</tspan><tspan fill="#eeeeec">$ help</tspan>
+    </text>
+    <text x="42" y="292" fill="#d3d7cf">Commands below: <tspan fill="#8ae234">whoami</tspan> | <tspan fill="#8ae234">experience</tspan> | <tspan fill="#8ae234">projects</tspan> | <tspan fill="#8ae234">stack</tspan> | <tspan fill="#8ae234">certs</tspan> | <tspan fill="#8ae234">graphs</tspan> | <tspan fill="#e95420" font-weight="bold">play (AWS Racer)</tspan></text>
+
+    <!-- Prompt 4: live cursor -->
+    <text x="24" y="330">
+      <tspan fill="#8ae234" font-weight="bold">binod@aws-cloud</tspan><tspan fill="#eeeeec">:</tspan><tspan fill="#729fcf" font-weight="bold">~</tspan><tspan fill="#eeeeec">$ ./run_all_modules.sh --interactive</tspan>
+    </text>
+    <rect x="378" y="317" width="9" height="16" fill="#8ae234" class="cursor"/>
+
+    <text x="24" y="376" fill="#ad7fa8">Connection established with Binod231 (Pokhara, NP / UTC+5:45)</text>
+  </g>
+
+  <!-- Right Side inside Ubuntu Terminal: 3D Dot-Matrix Headshot + 3D Isometric AWS Cubes -->
   <g>
-    <circle cx="150" cy="182" r="102" fill="none" stroke="#1e293b" stroke-width="1.2"/>
-    <circle cx="150" cy="182" r="98" fill="none" stroke="#38bdf8" stroke-width="1.3" stroke-dasharray="14 8 4 8" class="spin-ring"/>
-    <circle cx="150" cy="182" r="91" fill="none" stroke="#10b981" stroke-width="0.9" stroke-dasharray="6 10" class="spin-rev"/>
-    <circle cx="150" cy="182" r="87" fill="#040812" opacity="0.85"/>
-    <g filter="url(#neonGlow)">
+    <rect x="822" y="52" width="316" height="328" rx="10" fill="#1e0617" stroke="#5c3566" stroke-width="1"/>
+    <text x="980" y="72" text-anchor="middle" font-family="monospace" font-size="11" fill="#8ae234" font-weight="bold">[3D_HOLO_ID // BINOD231]</text>
+
+    <!-- Dot-matrix headshot -->
+    <circle cx="985" cy="148" r="76" fill="none" stroke="#8ae234" stroke-width="1.2" stroke-dasharray="10 6" class="spin-hud"/>
+    <g transform="translate(0, 13)">
       {portrait_dots}
     </g>
-    {"".join(orbit_nodes)}
-    <rect x="88" y="286" width="124" height="20" rx="5" fill="#09111f" stroke="#38bdf8" stroke-width="0.9"/>
-    <text x="150" y="299.5" text-anchor="middle" font-family="monospace" font-size="10" fill="#38bdf8" font-weight="bold">HOLO_ID // BINOD231</text>
-  </g>
 
-  <!-- CENTER: Operator Identity & Telemetry -->
-  <g transform="translate(292, 82)">
-    <text x="0" y="16" font-family="monospace" font-size="12" fill="#10b981" font-weight="bold">[ SYSTEM AUTHENTICATED // DEVOPS_ARCHITECT_LV99 ]</text>
-    <text x="0" y="58" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="40" font-weight="800" fill="#f8fafc" letter-spacing="-0.6">Binod Prasad Joshi</text>
-    <rect x="0" y="70" width="440" height="3" rx="1.5" fill="url(#neonBar)"/>
+    <!-- Mini 3D Isometric Cluster below hologram -->
+    <g transform="translate(888, 240)" class="cube-float">
+      <polygon points="92,16 132,35 92,54 52,35" fill="url(#awsTop)"/>
+      <polygon points="52,35 92,54 92,92 52,73" fill="#ce5c00"/>
+      <polygon points="132,35 92,54 92,92 132,73" fill="#8f3902"/>
+      <text x="92" y="39" text-anchor="middle" font-family="monospace" font-size="10.5" font-weight="bold" fill="#fff">AWS</text>
 
-    <text x="0" y="99" font-family="monospace" font-size="14" font-weight="bold" fill="#38bdf8">Cloud &amp; DevOps Consultant | 2x AWS Certified | AWS Community Builder</text>
+      <polygon points="36,52 64,65 36,78 8,65" fill="#729fcf"/>
+      <polygon points="8,65 36,78 36,104 8,91" fill="#3465a4"/>
+      <polygon points="64,65 36,78 36,104 64,91" fill="#204a87"/>
+      <text x="36" y="69" text-anchor="middle" font-family="monospace" font-size="8.5" font-weight="bold" fill="#fff">ECS</text>
 
-    <text x="0" y="128" font-family="monospace" font-size="12.5" fill="#94a3b8">&gt; Multi-AZ AWS VPC, ECS Fargate &amp; Private Cloud Infrastructure</text>
-    <text x="0" y="148" font-family="monospace" font-size="12.5" fill="#94a3b8">&gt; GitHub Actions CI/CD, Docker, FinOps Optimization &amp; DevSecOps</text>
-    <text x="0" y="168" font-family="monospace" font-size="12.5" fill="#94a3b8">&gt; Enterprise ERP (Odoo), Prometheus/Grafana &amp; Bedrock RAG Ops</text>
-
-    <!-- Terminal Stat Pills -->
-    <g transform="translate(0, 192)">
-      <rect x="0" y="0" width="158" height="32" rx="6" fill="#09111f" stroke="#38bdf8" stroke-width="1"/>
-      <circle cx="14" cy="16" r="3.5" fill="#38bdf8" class="pulse-slow"/>
-      <text x="25" y="20" font-family="monospace" font-size="11.5" fill="#e0f2fe" font-weight="bold">~50% FASTER CI/CD</text>
-
-      <rect x="168" y="0" width="162" height="32" rx="6" fill="#09111f" stroke="#10b981" stroke-width="1"/>
-      <circle cx="182" cy="16" r="3.5" fill="#10b981" class="pulse-slow"/>
-      <text x="193" y="20" font-family="monospace" font-size="11.5" fill="#d1fae5" font-weight="bold">~30% FINOPS SAVED</text>
-
-      <rect x="340" y="0" width="166" height="32" rx="6" fill="#09111f" stroke="#f59e0b" stroke-width="1"/>
-      <circle cx="354" cy="16" r="3.5" fill="#f59e0b" class="pulse-slow"/>
-      <text x="365" y="20" font-family="monospace" font-size="11.5" fill="#fef3c7" font-weight="bold">95% OAUTH2 SPEEDUP</text>
-    </g>
-  </g>
-
-  <!-- RIGHT: 3D Isometric Cloud Mesh -->
-  <g transform="translate(835, 76)">
-    <!-- Isometric Platform -->
-    <polygon points="175,215 335,135 175,55 15,135" fill="#08101e" stroke="#1e293b" stroke-width="1.5"/>
-    <polygon points="175,200 305,135 175,70 45,135" fill="none" stroke="#38bdf8" stroke-width="0.7" opacity="0.4"/>
-
-    <!-- Animated Data Streams -->
-    <line x1="95" y1="145" x2="175" y2="108" stroke="#38bdf8" stroke-width="2" class="data-line"/>
-    <line x1="175" y1="108" x2="255" y2="145" stroke="#a78bfa" stroke-width="2" class="data-line"/>
-    <line x1="175" y1="108" x2="175" y2="175" stroke="#10b981" stroke-width="2" class="data-line"/>
-    <line x1="95" y1="145" x2="175" y2="175" stroke="#f59e0b" stroke-width="1.4" class="data-line"/>
-    <line x1="255" y1="145" x2="175" y2="175" stroke="#f59e0b" stroke-width="1.4" class="data-line"/>
-
-    <!-- Center 3D Cube: AWS Core -->
-    <g class="float-a" filter="url(#neonGlow)">
-      <polygon points="175,52 218,73 175,94 132,73" fill="url(#awsTop)"/>
-      <polygon points="132,73 175,94 175,138 132,117" fill="#c2410c"/>
-      <polygon points="218,73 175,94 175,138 218,117" fill="#9a3412"/>
-      <text x="175" y="77" text-anchor="middle" font-family="monospace" font-size="11" font-weight="bold" fill="#fff">AWS</text>
-    </g>
-
-    <!-- Left 3D Cube: ECS / Docker -->
-    <g class="float-b">
-      <polygon points="90,115 123,131 90,147 57,131" fill="url(#cyanTop)"/>
-      <polygon points="57,131 90,147 90,181 57,165" fill="#0369a1"/>
-      <polygon points="123,131 90,147 90,181 123,165" fill="#0c4a6e"/>
-      <text x="90" y="135" text-anchor="middle" font-family="monospace" font-size="9.5" font-weight="bold" fill="#fff">ECS</text>
-    </g>
-
-    <!-- Right 3D Cube: CI/CD -->
-    <g class="float-b">
-      <polygon points="260,115 293,131 260,147 227,131" fill="#a78bfa"/>
-      <polygon points="227,131 260,147 260,181 227,165" fill="#6d28d9"/>
-      <polygon points="293,131 260,147 260,181 293,165" fill="#4c1d95"/>
-      <text x="260" y="135" text-anchor="middle" font-family="monospace" font-size="9.5" font-weight="bold" fill="#fff">CI/CD</text>
-    </g>
-
-    <!-- Front 3D Cube: RAG / OPS -->
-    <g class="float-a">
-      <polygon points="175,162 206,177 175,192 144,177" fill="#34d399"/>
-      <polygon points="144,177 175,192 175,222 144,207" fill="#059669"/>
-      <polygon points="206,177 175,192 175,222 206,207" fill="#064e3b"/>
-      <text x="175" y="180" text-anchor="middle" font-family="monospace" font-size="9" font-weight="bold" fill="#fff">OPS</text>
+      <polygon points="148,52 176,65 148,78 120,65" fill="#8ae234"/>
+      <polygon points="120,65 148,78 148,104 120,91" fill="#4e9a06"/>
+      <polygon points="176,65 148,78 148,104 176,91" fill="#2d5a04"/>
+      <text x="148" y="69" text-anchor="middle" font-family="monospace" font-size="8.5" font-weight="bold" fill="#fff">OPS</text>
     </g>
   </g>
 </svg>
 """
-    (ASSETS_DIR / "devops-3d-banner.svg").write_text(svg, encoding="utf-8")
+    (ASSETS_DIR / "ubuntu-terminal-profile.svg").write_text(svg, encoding="utf-8")
 
 
 def generate_3d_isometric_contrib(total_str: str, weeks: list):
-    """Render Binod's real contribution grid as a glowing 3D isometric skyline."""
+    """Render live contributions as a 3D Isometric Skyline framed inside an Ubuntu Terminal window."""
     num_weeks = len(weeks)
-    max_count = max(
-        (day[1] for w in weeks for day in w),
-        default=1,
-    )
+    max_count = max((day[1] for w in weeks for day in w), default=1)
     max_count = max(max_count, 1)
 
-    # Isometric projection parameters
-    dx = 9.6
-    dy = 4.9
+    dx = 9.5
+    dy = 4.8
     origin_x = 120
     origin_y = 225
 
-    bars = []
-    # Painter's algorithm: back-to-front (col + row ascending)
     cells = []
     for c in range(num_weeks):
         for r in range(7):
@@ -361,206 +315,134 @@ def generate_3d_isometric_contrib(total_str: str, weeks: list):
     cells.sort(key=lambda item: (item[0], item[1]))
 
     palette = {
-        0: ("#172033", "#0f172a", "#090f1d"),
-        1: ("#0e7490", "#155e75", "#083344"),
-        2: ("#06b6d4", "#0284c7", "#075985"),
-        3: ("#34d399", "#059669", "#065f46"),
-        4: ("#fbbf24", "#d97706", "#92400e"),
+        0: ("#3d1430", "#290c20", "#1c0715"),
+        1: ("#4e9a06", "#3d7a05", "#295203"),
+        2: ("#73d216", "#58a310", "#3c700b"),
+        3: ("#38bdf8", "#0284c7", "#075985"),
+        4: ("#f59e0b", "#e95420", "#9a3412"),
     }
 
+    bars = []
     for _, c, r, level, count, _ in cells:
-        # Isometric center base
         bx = origin_x + c * dx + r * dx * 1.15
         by = origin_y - c * dy * 0.48 + r * dy * 1.35
-
-        if count == 0:
-            h = 3.0
-        else:
-            # Smooth log-scaled height up to 88px
-            h = 8.0 + 78.0 * (math.log1p(count) / math.log1p(max_count))
-
+        h = 3.0 if count == 0 else (8.0 + 78.0 * (math.log1p(count) / math.log1p(max_count)))
         top_c, left_c, right_c = palette.get(level, palette[1])
-        w = 8.4
-        d = 4.3
-
-        # Top diamond shifted up by h
+        w, d = 8.4, 4.3
         p_top = f"{bx:.1f},{by-h-d:.1f} {bx+w:.1f},{by-h:.1f} {bx:.1f},{by-h+d:.1f} {bx-w:.1f},{by-h:.1f}"
         p_left = f"{bx-w:.1f},{by-h:.1f} {bx:.1f},{by-h+d:.1f} {bx:.1f},{by+d:.1f} {bx-w:.1f},{by:.1f}"
         p_right = f"{bx+w:.1f},{by-h:.1f} {bx:.1f},{by-h+d:.1f} {bx:.1f},{by+d:.1f} {bx+w:.1f},{by:.1f}"
-
-        glow_cls = ' class="peak"' if level >= 4 else ""
         bars.append(
-            f'<g{glow_cls}>'
-            f'<polygon points="{p_left}" fill="{left_c}" stroke="#050811" stroke-width="0.35"/>'
-            f'<polygon points="{p_right}" fill="{right_c}" stroke="#050811" stroke-width="0.35"/>'
-            f'<polygon points="{p_top}" fill="{top_c}" stroke="#050811" stroke-width="0.35"/>'
-            f"</g>"
+            f'<g><polygon points="{p_left}" fill="{left_c}" stroke="#1a0514" stroke-width="0.35"/>'
+            f'<polygon points="{p_right}" fill="{right_c}" stroke="#1a0514" stroke-width="0.35"/>'
+            f'<polygon points="{p_top}" fill="{top_c}" stroke="#1a0514" stroke-width="0.35"/></g>'
         )
 
     svg = f"""<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1120 400" width="100%" height="400">
   <defs>
     <linearGradient id="skyBg" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#0d1117"/>
-      <stop offset="100%" stop-color="#111927"/>
+      <stop offset="0%" stop-color="#300a24"/>
+      <stop offset="100%" stop-color="#1e0617"/>
     </linearGradient>
-    <pattern id="isoGrid" width="28" height="28" patternUnits="userSpaceOnUse">
-      <path d="M 28 0 L 0 0 0 28" fill="none" stroke="#132038" stroke-width="0.6"/>
-    </pattern>
+    <linearGradient id="tBar" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#484642"/>
+      <stop offset="100%" stop-color="#2c2b29"/>
+    </linearGradient>
   </defs>
-  <style>
-    @keyframes peakPulse {{ 0%, 100% {{ opacity: 0.92; }} 50% {{ opacity: 1; }} }}
-    .peak {{ animation: peakPulse 2.4s ease-in-out infinite; }}
-  </style>
+  <rect width="1120" height="400" rx="10" fill="url(#skyBg)" stroke="#4c4a46" stroke-width="1.5"/>
+  <path d="M 10,0 L 1110,0 Q 1120,0 1120,10 L 1120,32 L 0,32 L 0,10 Q 0,0 10,0 Z" fill="url(#tBar)"/>
+  <text x="560" y="20" text-anchor="middle" font-family="system-ui, sans-serif" font-size="12.5" font-weight="600" fill="#eeeeec">binod@aws-cloud: ~/3d-contrib-skyline</text>
+  <text x="24" y="56" font-family="monospace" font-size="12.5" fill="#8ae234" font-weight="bold">binod@aws-cloud:~# ./skyline_3d --total="{html.escape(total_str)}" --peak="{max_count}"</text>
 
-  <rect width="1120" height="400" rx="14" fill="url(#skyBg)" stroke="#1e293b" stroke-width="1.5"/>
-  <rect width="1120" height="400" rx="14" fill="url(#isoGrid)"/>
-
-  <!-- Terminal Header -->
-  <rect x="20" y="16" width="1080" height="32" rx="8" fill="#09111f" stroke="#1e293b"/>
-  <text x="36" y="36" font-family="monospace" font-size="12" fill="#38bdf8" font-weight="bold">3D_CONTRIB_SKYLINE // USER: {html.escape(USERNAME)} // 365D_TOTAL: {html.escape(total_str)} // PEAK_DAY: {max_count} COMMITS</text>
-
-  <!-- Legend -->
-  <g transform="translate(830, 24)">
-    <rect x="0" y="2" width="12" height="12" rx="2" fill="#172033"/>
-    <rect x="22" y="2" width="12" height="12" rx="2" fill="#0e7490"/>
-    <rect x="44" y="2" width="12" height="12" rx="2" fill="#06b6d4"/>
-    <rect x="66" y="2" width="12" height="12" rx="2" fill="#34d399"/>
-    <rect x="88" y="2" width="12" height="12" rx="2" fill="#fbbf24"/>
-    <text x="112" y="12" font-family="monospace" font-size="10.5" fill="#94a3b8">LOW -&gt; PEAK</text>
+  <g transform="translate(860, 44)">
+    <rect x="0" y="2" width="12" height="12" rx="2" fill="#3d1430"/>
+    <rect x="20" y="2" width="12" height="12" rx="2" fill="#4e9a06"/>
+    <rect x="40" y="2" width="12" height="12" rx="2" fill="#73d216"/>
+    <rect x="60" y="2" width="12" height="12" rx="2" fill="#38bdf8"/>
+    <rect x="80" y="2" width="12" height="12" rx="2" fill="#f59e0b"/>
+    <text x="102" y="12" font-family="monospace" font-size="10.5" fill="#d3d7cf">LOW -&gt; PEAK</text>
   </g>
 
-  <!-- 3D Bars -->
-  <g transform="translate(180, 62)">
+  <g transform="translate(180, 68)">
     {"".join(bars)}
   </g>
-
-  <text x="36" y="380" font-family="monospace" font-size="11" fill="#64748b">[RENDERED FROM LIVE GITHUB CONTRIBUTION MATRIX :: AUTO-SYNCED DAILY VIA GITHUB ACTIONS]</text>
 </svg>
 """
     (ASSETS_DIR / "3d-isometric-contrib.svg").write_text(svg, encoding="utf-8")
 
 
-def generate_arcade_game(total_str: str, weeks: list):
-    """Render an animated DevOps Terminal Invaders game across the real contribution grid."""
-    num_weeks = min(len(weeks), 53)
-    cell_size = 15
-    gap = 4
-    step = cell_size + gap
-    grid_x0 = 56
-    grid_y0 = 86
-
-    grid_rects = []
-    level_colors = {
-        0: "#111827",
-        1: "#0e4429",
-        2: "#006d32",
-        3: "#26a641",
-        4: "#39d353",
-    }
-
-    for c in range(num_weeks):
-        for r in range(7):
-            level, _, _ = weeks[c][r]
-            x = grid_x0 + c * step
-            y = grid_y0 + r * step
-            col = level_colors.get(level, "#111827")
-            grid_rects.append(
-                f'<rect x="{x}" y="{y}" width="{cell_size}" height="{cell_size}" rx="3" fill="{col}" stroke="#0b1220" stroke-width="0.8"/>'
-            )
-
-    # Enemy bug nodes ("CVE", "502", "OOM", "LAG") targeted by laser beams
-    targets = [
-        (grid_x0 + 8 * step, grid_y0 + 1 * step, "CVE", "#ef4444", "0s"),
-        (grid_x0 + 21 * step, grid_y0 + 2 * step, "502", "#f59e0b", "1.1s"),
-        (grid_x0 + 34 * step, grid_y0 + 1 * step, "OOM", "#ec4899", "2.2s"),
-        (grid_x0 + 46 * step, grid_y0 + 3 * step, "LAG", "#a855f7", "3.3s"),
-    ]
-    bug_elements = []
-    for bx, by, tag, col, delay in targets:
-        bug_elements.append(
-            f'<g class="bug-pulse" style="animation-delay:{delay}">'
-            f'<rect x="{bx-3}" y="{by-3}" width="21" height="21" rx="4" fill="#090d16" stroke="{col}" stroke-width="1.4"/>'
-            f'<text x="{bx+7.5}" y="{by+10.5}" text-anchor="middle" font-family="monospace" font-size="7.5" font-weight="bold" fill="{col}">{tag}</text>'
-            f"</g>"
-        )
-
-    svg = f"""<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1120 330" width="100%" height="330">
+def generate_racer_preview():
+    """Generate an Ubuntu-framed 3D AWS DevOps Racing Game preview card."""
+    svg = """<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1120 300" width="100%" height="300">
   <defs>
-    <linearGradient id="arcBg" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#0d1117"/>
-      <stop offset="100%" stop-color="#111927"/>
+    <linearGradient id="rBg" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#300a24"/>
+      <stop offset="60%" stop-color="#190514"/>
+      <stop offset="100%" stop-color="#0d1117"/>
+    </linearGradient>
+    <linearGradient id="tBar2" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#484642"/>
+      <stop offset="100%" stop-color="#2c2b29"/>
+    </linearGradient>
+    <linearGradient id="roadGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#1e293b"/>
+      <stop offset="100%" stop-color="#090d16"/>
     </linearGradient>
   </defs>
   <style>
-    @keyframes patrol {{
-      0%   {{ transform: translateX(0px); }}
-      25%  {{ transform: translateX(260px); }}
-      50%  {{ transform: translateX(520px); }}
-      75%  {{ transform: translateX(760px); }}
-      100% {{ transform: translateX(0px); }}
-    }}
-    @keyframes fireLaser {{
-      0%   {{ transform: translateY(0px); opacity: 1; }}
-      80%  {{ transform: translateY(-138px); opacity: 0.95; }}
-      100% {{ transform: translateY(-148px); opacity: 0; }}
-    }}
-    @keyframes bugPulse {{
-      0%, 100% {{ opacity: 1; transform: scale(1); }}
-      50% {{ opacity: 0.45; }}
-    }}
-    .ship-patrol {{ animation: patrol 9s ease-in-out infinite; }}
-    .laser-beam {{ animation: fireLaser 0.9s linear infinite; }}
-    .bug-pulse {{ animation: bugPulse 1.8s ease-in-out infinite; }}
+    @keyframes laneScroll { from { stroke-dashoffset: 0; } to { stroke-dashoffset: -48; } }
+    @keyframes carBob { 0%, 100% { transform: translateY(0px); } 50% { transform: translateY(-3px); } }
+    .lane-dash { stroke-dasharray: 18 14; animation: laneScroll 0.7s linear infinite; }
+    .car-bob { animation: carBob 1.2s ease-in-out infinite; }
   </style>
 
-  <!-- Terminal Arcade Cabinet -->
-  <rect width="1120" height="330" rx="14" fill="url(#arcBg)" stroke="#1e293b" stroke-width="1.5"/>
+  <rect width="1120" height="300" rx="10" fill="url(#rBg)" stroke="#4c4a46" stroke-width="1.5"/>
+  <path d="M 10,0 L 1110,0 Q 1120,0 1120,10 L 1120,32 L 0,32 L 0,10 Q 0,0 10,0 Z" fill="url(#tBar2)"/>
+  <text x="560" y="20" text-anchor="middle" font-family="system-ui, sans-serif" font-size="12.5" font-weight="600" fill="#eeeeec">binod@aws-cloud: ~/aws-devops-turbo-gp</text>
 
-  <!-- Top Arcade HUD -->
-  <rect x="20" y="16" width="1080" height="36" rx="8" fill="#09111f" stroke="#10b981" stroke-width="1"/>
-  <text x="36" y="38" font-family="monospace" font-size="13" font-weight="bold" fill="#34d399">DEVOPS_DEFENDER.SH</text>
-  <text x="230" y="38" font-family="monospace" font-size="12" fill="#38bdf8">PLAYER: {html.escape(USERNAME)}</text>
-  <text x="415" y="38" font-family="monospace" font-size="12" fill="#fbbf24">XP: {html.escape(total_str)}</text>
-  <text x="550" y="38" font-family="monospace" font-size="12" fill="#e2e8f0">SHIELD: [||||||||||] 99.9% SLA</text>
-  <text x="860" y="38" font-family="monospace" font-size="11.5" fill="#10b981">[LIVE_COMMIT_MATRIX]</text>
+  <!-- Perspective Highway -->
+  <polygon points="480,105 640,105 940,295 180,295" fill="url(#roadGrad)" stroke="#38bdf8" stroke-width="2"/>
+  <line x1="533" y1="105" x2="430" y2="295" stroke="#8ae234" stroke-width="2" class="lane-dash"/>
+  <line x1="587" y1="105" x2="690" y2="295" stroke="#8ae234" stroke-width="2" class="lane-dash"/>
 
-  <!-- Contribution Matrix Arena -->
-  <rect x="38" y="68" width="1044" height="214" rx="10" fill="#050912" stroke="#1e293b"/>
-  {"".join(grid_rects)}
-  {"".join(bug_elements)}
+  <!-- AWS Service Boosts on Road -->
+  <rect x="445" y="148" width="64" height="24" rx="5" fill="#052e16" stroke="#8ae234" stroke-width="1.5"/>
+  <text x="477" y="164" text-anchor="middle" font-family="monospace" font-size="11" font-weight="bold" fill="#8ae234">AWS ECS</text>
 
-  <!-- Animated DevOps Defender Ship & Laser -->
-  <g transform="translate(135, 245)">
-    <g class="ship-patrol">
-      <!-- Laser -->
-      <rect x="13" y="-22" width="4" height="16" rx="2" fill="#38bdf8" class="laser-beam"/>
-      <!-- Cyber Defender Ship -->
-      <polygon points="15,0 30,18 22,18 22,23 8,23 8,18 0,18" fill="#38bdf8"/>
-      <polygon points="15,4 22,16 8,16" fill="#e0f2fe"/>
-      <rect x="11" y="23" width="8" height="4" rx="1" fill="#10b981"/>
-    </g>
+  <rect x="615" y="176" width="64" height="24" rx="5" fill="#1e1b4b" stroke="#38bdf8" stroke-width="1.5"/>
+  <text x="647" y="192" text-anchor="middle" font-family="monospace" font-size="11" font-weight="bold" fill="#38bdf8">REDIS</text>
+
+  <rect x="700" y="220" width="64" height="24" rx="5" fill="#450a0a" stroke="#ef4444" stroke-width="1.5"/>
+  <text x="732" y="236" text-anchor="middle" font-family="monospace" font-size="11" font-weight="bold" fill="#ef4444">[502 ERR]</text>
+
+  <!-- Cyber Racer Car -->
+  <g transform="translate(518, 222)" class="car-bob">
+    <polygon points="42,0 68,14 78,44 6,44 16,14" fill="#0284c7" stroke="#38bdf8" stroke-width="2"/>
+    <polygon points="42,6 60,18 24,18" fill="#e0f2fe"/>
+    <rect x="14" y="42" width="14" height="7" rx="2" fill="#e95420"/>
+    <rect x="56" y="42" width="14" height="7" rx="2" fill="#e95420"/>
   </g>
 
-  <!-- Bottom Arcade Ticker -->
-  <text x="40" y="308" font-family="monospace" font-size="11.5" fill="#94a3b8">&gt; [MISSION_LOG] Mitigated OAuth2 Latency (+95% Speed) | Pruned OpenSearch (-30% Cost) | Zero-Downtime ECS Rollouts [OK]</text>
+  <!-- Left Overlay Callout -->
+  <text x="36" y="76" font-family="monospace" font-size="14" font-weight="bold" fill="#8ae234">binod@aws-cloud:~$ ./play_aws_racer.sh</text>
+  <text x="36" y="108" font-family="system-ui, sans-serif" font-size="26" font-weight="800" fill="#ffffff">AWS_TURBO_GP</text>
+  <text x="36" y="134" font-family="monospace" font-size="12.5" fill="#d3d7cf">3D Highway Racer + Live Ubuntu Terminal</text>
+  <text x="36" y="162" font-family="monospace" font-size="12" fill="#8ae234">&gt; Collect [ECS], [REDIS], [WAF], [LAMBDA]</text>
+  <text x="36" y="182" font-family="monospace" font-size="12" fill="#f59e0b">&gt; Dodge [502], [OOM], [CVE], [DDOS]</text>
+  <rect x="36" y="208" width="236" height="36" rx="8" fill="#e95420"/>
+  <text x="154" y="230" text-anchor="middle" font-family="monospace" font-size="13" font-weight="bold" fill="#ffffff">[ CLICK TO PLAY NOW ]</text>
 </svg>
 """
-    (ASSETS_DIR / "devops-arcade-game.svg").write_text(svg, encoding="utf-8")
+    (ASSETS_DIR / "devops-racer-preview.svg").write_text(svg, encoding="utf-8")
 
 
 def main():
-    try:
-        total_str, weeks = fetch_contributions(USERNAME)
-    except Exception as exc:
-        print(f"Warning: failed to fetch live contributions ({exc}); using fallback grid")
-        total_str = "1,250"
-        weeks = [[((c + r) % 5, ((c * 3 + r) % 12), "") for r in range(7)] for c in range(53)]
-
+    repos, followers, total_str, weeks = fetch_github_stats(USERNAME)
     generate_circular_avatar(ASSETS_DIR / "profile.jpeg")
-    generate_banner(total_str)
+    generate_ubuntu_terminal(repos, followers, total_str, weeks)
     generate_3d_isometric_contrib(total_str, weeks)
-    generate_arcade_game(total_str, weeks)
-    print(f"Generated SVGs for {USERNAME} ({total_str} contributions)")
+    generate_racer_preview()
+    print(f"Generated Ubuntu Terminal + 3D Skyline + AWS Racer SVGs for {USERNAME} ({total_str} commits, {repos} repos)")
 
 
 if __name__ == "__main__":
