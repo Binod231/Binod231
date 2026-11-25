@@ -1,4 +1,4 @@
-name: Generate 3D & Snake Contributions
+name: Update 3D DevOps Visuals
 
 on:
   schedule:
@@ -11,27 +11,26 @@ permissions:
 jobs:
   build:
     runs-on: ubuntu-latest
-    name: Generate 3D & Snake Contribution Graphs
+    name: Generate 3D & Gamified DevOps SVGs
     steps:
       - uses: actions/checkout@v4
 
-      - name: Generate 3D Contribution Graph
-        uses: yoshi389111/github-profile-3d-contrib@0.7.1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          USERNAME: ${{ github.repository_owner }}
-
-      - name: Generate Contribution Snake
-        uses: Platane/snk@v3
+      - uses: actions/setup-python@v5
         with:
-          github_user_name: ${{ github.repository_owner }}
-          outputs: |
-            dist/github-contribution-grid-snake-dark.svg?palette=github-dark
+          python-version: "3.12"
 
-      - name: Commit & Push SVGs
+      - name: Install Pillow
+        run: pip install pillow
+
+      - name: Generate Live Contribution & 3D Banner SVGs
+        env:
+          GITHUB_USERNAME: ${{ github.repository_owner }}
+        run: python3 .github/scripts/generate_devops_visuals.py
+
+      - name: Commit & Push Updated SVGs
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add profile-3d-contrib/ dist/
-          git commit -m "chore: update 3d and snake contribution graphs" || exit 0
+          git add assets/*.svg
+          git commit -m "chore: refresh live 3d and gamified devops svgs" || exit 0
           git push
