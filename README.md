@@ -64,8 +64,35 @@ SEC_POSTURE   : Shift-Left SAST | Least-Privilege IAM | AWS WAF & Backup
 ---
 
 ```bash
+root@binod-cloud:~# ./incident_responder.sh --interactive --multiplayer
+# [PLAYABLE GAME] Click any terminal command below -> click "Submit new issue" -> wait ~15s & refresh!
+```
+
+<div align="center">
+  <img src="./assets/devops-game-board.svg" alt="Playable DevOps Incident Responder Terminal Game" width="100%" />
+</div>
+
+<p align="center">
+  <a href="https://github.com/Binod231/Binod231/issues/new?title=GAME%3AWAF_BLOCK&body=Just+click+Create+to+execute+.%2Fwaf_block.sh+against+the+active+threat!">
+    <img src="https://img.shields.io/badge/%24_.%2Fwaf__block.sh-FIRE_WAF-050811?style=flat-square&labelColor=0f172a&color=ef4444" alt="WAF Block" />
+  </a>
+  <a href="https://github.com/Binod231/Binod231/issues/new?title=GAME%3ASCALE_ECS&body=Just+click+Create+to+execute+.%2Fscale_ecs.sh+and+autoscale+Fargate!">
+    <img src="https://img.shields.io/badge/%24_.%2Fscale__ecs.sh-AUTOSCALE-050811?style=flat-square&labelColor=0f172a&color=38bdf8" alt="Scale ECS" />
+  </a>
+  <a href="https://github.com/Binod231/Binod231/issues/new?title=GAME%3AFLUSH_REDIS&body=Just+click+Create+to+execute+.%2Fflush_redis.sh+and+heal+cluster+SLA!">
+    <img src="https://img.shields.io/badge/%24_.%2Fflush__redis.sh-HEAL_SLA-050811?style=flat-square&labelColor=0f172a&color=a855f7" alt="Flush Redis" />
+  </a>
+  <a href="https://github.com/Binod231/Binod231/issues/new?title=GAME%3ACANARY_DEPLOY&body=Just+click+Create+to+execute+.%2Fcanary_deploy.sh+for+critical+damage!">
+    <img src="https://img.shields.io/badge/%24_.%2Fcanary__deploy.sh-CRIT_STRIKE-050811?style=flat-square&labelColor=0f172a&color=f59e0b" alt="Canary Deploy" />
+  </a>
+  <a href="https://github.com/Binod231/Binod231/issues/new?title=GAME%3ARESET&body=Just+click+Create+to+reboot+the+cluster+defense+game!">
+    <img src="https://img.shields.io/badge/%24_.%2Freboot__game.sh-NEW_GAME-050811?style=flat-square&labelColor=0f172a&color=10b981" alt="Reset Game" />
+  </a>
+</p>
+
+```bash
 root@binod-cloud:~# ./devops_defender.sh --mode=arcade --grid=live
-# [INFO] Neutralizing [CVE], [502], [OOM], [LAG] across 1,250+ live commit nodes...
+# [INFO] Live automated contribution defender across 1,250+ commit nodes.
 ```
 
 <div align="center">

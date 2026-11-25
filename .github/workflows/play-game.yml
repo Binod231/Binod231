@@ -1,0 +1,42 @@
+name: Play DevOps Terminal Game
+
+on:
+  issues:
+    types: [opened]
+
+concurrency:
+  group: devops-game-loop
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+  issues: write
+
+jobs:
+  play-turn:
+    if: startsWith(github.event.issue.title, 'GAME:')
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Process Player Move & Render Game Board
+        env:
+          ISSUE_TITLE: ${{ github.event.issue.title }}
+          PLAYER_USER: ${{ github.event.issue.user.login }}
+          ISSUE_NUMBER: ${{ github.event.issue.number }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+        run: python3 .github/scripts/game_engine.py
+
+      - name: Commit & Push Updated Game State
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git pull --rebase
+          git add .github/state/game_state.json assets/devops-game-board.svg
+          git commit -m "chore(game): process player turn" || exit 0
+          git push
