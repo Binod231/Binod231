@@ -12,7 +12,7 @@ import os
 import re
 import urllib.request
 from pathlib import Path
-from PIL import Image, ImageEnhance, ImageOps
+from PIL import Image, ImageDraw, ImageEnhance, ImageFilter, ImageOps
 
 USERNAME = os.environ.get("GITHUB_USERNAME", "Binod231")
 ROOT = Path(__file__).resolve().parents[2]
@@ -70,27 +70,51 @@ def fetch_contributions(username: str):
     return total_str, weeks
 
 
+def generate_circular_avatar(img_path: Path):
+    """Create a transparent circular PNG avatar with a glowing cyan/emerald cyber ring."""
+    if not img_path.exists():
+        return
+    size = 280
+    im = Image.open(img_path).convert("RGBA")
+    w, h = im.size
+    side = min(w, h)
+    left = (w - side) // 2
+    top = max(0, int((h - side) * 0.08))
+    im = im.crop((left, top, left + side, top + side)).resize((size - 16, size - 16), Image.Resampling.LANCZOS)
+
+    mask = Image.new("L", (size - 16, size - 16), 0)
+    ImageDraw.Draw(mask).ellipse((0, 0, size - 17, size - 17), fill=255)
+    im.putalpha(mask)
+
+    canvas = Image.new("RGBA", (size, size), (0, 0, 0, 0))
+    draw = ImageDraw.Draw(canvas)
+    # Outer cyber rings
+    draw.ellipse((2, 2, size - 3, size - 3), outline=(56, 189, 248, 220), width=3)
+    draw.ellipse((6, 6, size - 7, size - 7), outline=(16, 185, 129, 200), width=2)
+    canvas.paste(im, (8, 8), im)
+    canvas.save(ASSETS_DIR / "avatar-circle.png", "PNG")
+
+
 def build_dot_matrix_portrait(img_path: Path, cx: int, cy: int, radius: int = 86) -> str:
-    """Convert profile photo into a glowing 3D cyber halftone dot-matrix portrait."""
+    """Convert studio headshot into a crisp 3D cyber halftone dot-matrix portrait."""
     if not img_path.exists():
         return ""
 
     im = Image.open(img_path).convert("L")
-    # Center-crop square focusing slightly toward top for face
     w, h = im.size
     side = min(w, h)
     left = (w - side) // 2
-    top = max(0, int((h - side) * 0.2))
+    top = max(0, int((h - side) * 0.06))
     im = im.crop((left, top, left + side, top + side))
-    im = ImageOps.autocontrast(im, cutoff=2)
-    im = ImageEnhance.Contrast(im).enhance(1.35)
 
-    grid_n = 28
-    im = im.resize((grid_n, grid_n), Image.Resampling.LANCZOS)
-    px = im.load()
+    grid_n = 32
+    gray = im.resize((grid_n, grid_n), Image.Resampling.LANCZOS)
+    edges = gray.filter(ImageFilter.FIND_EDGES)
+    px = gray.load()
+    epx = edges.load()
 
     dots = []
-    step = (radius * 1.85) / grid_n
+    step = (radius * 1.82) / grid_n
     start_x = cx - (grid_n - 1) * step / 2
     start_y = cy - (grid_n - 1) * step / 2
 
@@ -102,27 +126,29 @@ def build_dot_matrix_portrait(img_path: Path, cx: int, cy: int, radius: int = 86
             if dist > 0.96:
                 continue
 
-            val = px[gx, gy] / 255.0  # 0=dark, 1=bright
-            # Subtle 3D spherical bulge near center
-            sphere_boost = math.sqrt(max(0.0, 1.0 - dist * dist))
-            r_dot = (0.55 + val * 2.15) * (0.78 + 0.25 * sphere_boost)
-            if r_dot < 0.72:
+            raw = px[gx, gy]
+            edge = epx[gx, gy] / 255.0
+            # Filter out bright studio backdrop (> 218) unless it's a sharp edge
+            if raw > 218 and edge < 0.25:
                 continue
+
+            # Map subject features: combine skin/face highlights + edge contours
+            lum = raw / 255.0
+            sphere = math.sqrt(max(0.0, 1.0 - dist * dist))
+            intensity = min(1.0, max(0.18, (1.0 - lum) * 0.55 + edge * 0.85 + (0.35 if 0.28 < lum < 0.82 else 0.0)))
+            r_dot = (0.7 + intensity * 1.75) * (0.82 + 0.22 * sphere)
 
             x = start_x + gx * step
             y = start_y + gy * step
-            if val > 0.78:
-                color = "#e0f2fe"
-                opacity = f"{0.85 + 0.15 * sphere_boost:.2f}"
-            elif val > 0.48:
-                color = "#38bdf8"
-                opacity = f"{0.65 + 0.25 * sphere_boost:.2f}"
-            elif val > 0.25:
-                color = "#0ea5e9"
-                opacity = f"{0.45 + 0.25 * sphere_boost:.2f}"
-            else:
+            if edge > 0.35 or (0.42 < lum < 0.80):
+                color = "#e0f2fe" if edge > 0.45 else "#38bdf8"
+                opacity = f"{min(1.0, 0.65 + intensity * 0.35):.2f}"
+            elif lum <= 0.42:
                 color = "#10b981"
-                opacity = "0.32"
+                opacity = "0.78"
+            else:
+                color = "#0ea5e9"
+                opacity = "0.52"
 
             dots.append(
                 f'<circle cx="{x:.1f}" cy="{y:.1f}" r="{r_dot:.2f}" fill="{color}" opacity="{opacity}"/>'
@@ -530,6 +556,7 @@ def main():
         total_str = "1,250"
         weeks = [[((c + r) % 5, ((c * 3 + r) % 12), "") for r in range(7)] for c in range(53)]
 
+    generate_circular_avatar(ASSETS_DIR / "profile.jpeg")
     generate_banner(total_str)
     generate_3d_isometric_contrib(total_str, weeks)
     generate_arcade_game(total_str, weeks)

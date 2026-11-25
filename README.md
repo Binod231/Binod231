@@ -4,24 +4,24 @@
 
 <br/>
 
-<div align="center">
-  <img src="./assets/profile.jpeg" width="136" alt="Binod Prasad Joshi" />
-  <br/><br/>
+<p align="center">
+  <img src="./assets/avatar-circle.png" width="132" alt="Binod Prasad Joshi" />
+</p>
+
+<p align="center">
   <a href="https://binodprasadjoshi.com.np">
     <img src="https://readme-typing-svg.demolab.com?font=JetBrains+Mono&weight=700&size=15&duration=2400&pause=900&color=34D399&center=true&vCenter=true&width=720&lines=binod%40aws-prod%3A~%24+whoami+--cloud-devops-architect;binod%40aws-prod%3A~%24+aws+sts+get-caller-identity+--2x-certified;binod%40aws-prod%3A~%24+kubectl+get+nodes+--sla%3D99.9%25+--finops%3D-30%25;binod%40aws-prod%3A~%24+./ship.sh+--zero-downtime+--prod" alt="Terminal Prompt" />
   </a>
-  <br/>
-  <code>
-    <a href="https://binod231.github.io/Binod231/">[ ./play_arcade ]</a> &nbsp;
-    <a href="https://binodprasadjoshi.com.np">[ ./portfolio ]</a> &nbsp;
-    <a href="https://www.linkedin.com/in/binod-prasad-joshi-549067281">[ ./linkedin ]</a> &nbsp;
-    <a href="https://www.credly.com/badges/4fe1dc98-121e-41ed-a1b1-0d611ef6b6ac/public_url">[ ./aws-saa-c03 ]</a> &nbsp;
-    <a href="mailto:joshibinodprasad77@gmail.com">[ ./email ]</a> &nbsp;
-    <a href="https://drive.google.com/file/d/1QdJ0GqlDd9ft0moKAfKePkIh_cKaUklA/view?usp=sharing">[ ./resume.pdf ]</a>
-  </code>
-</div>
+</p>
 
-<br/>
+<p align="center">
+  <a href="https://binod231.github.io/Binod231/"><img src="https://img.shields.io/badge/%24-play__3d__arcade-10b981?style=flat-square&labelColor=0d1117" alt="Play 3D Arcade" /></a>
+  <a href="https://binodprasadjoshi.com.np"><img src="https://img.shields.io/badge/%24-portfolio-38bdf8?style=flat-square&labelColor=0d1117" alt="Portfolio" /></a>
+  <a href="https://www.linkedin.com/in/binod-prasad-joshi-549067281"><img src="https://img.shields.io/badge/%24-linkedin-0A66C2?style=flat-square&labelColor=0d1117" alt="LinkedIn" /></a>
+  <a href="https://www.credly.com/badges/4fe1dc98-121e-41ed-a1b1-0d611ef6b6ac/public_url"><img src="https://img.shields.io/badge/%24-aws__saa__c03-f59e0b?style=flat-square&labelColor=0d1117" alt="AWS SAA" /></a>
+  <a href="mailto:joshibinodprasad77@gmail.com"><img src="https://img.shields.io/badge/%24-email-10b981?style=flat-square&labelColor=0d1117" alt="Email" /></a>
+  <a href="https://drive.google.com/file/d/1QdJ0GqlDd9ft0moKAfKePkIh_cKaUklA/view?usp=sharing"><img src="https://img.shields.io/badge/%24-resume.pdf-8b5cf6?style=flat-square&labelColor=0d1117" alt="Resume" /></a>
+</p>
 
 ---
 
@@ -52,16 +52,18 @@ root@binod-cloud:~# ./skyline_3d.sh --render --days=365
 ---
 
 ```bash
-root@binod-cloud:~# ./devops_defender.sh --grid=live --launch="https://binod231.github.io/Binod231/"
+root@binod-cloud:~# ./cloud_core_3d.sh --launch="https://binod231.github.io/Binod231/"
 ```
 
 <div align="center">
   <a href="https://binod231.github.io/Binod231/">
-    <img src="./assets/devops-arcade-game.svg" alt="Click to Play Live DevOps Defender Terminal Arcade" width="100%" />
+    <img src="./assets/devops-arcade-game.svg" alt="Launch CLOUD_CORE 3D Terminal Game" width="100%" />
   </a>
-  <br/>
-  <code><a href="https://binod231.github.io/Binod231/">[ &gt; CLICK HERE TO PLAY LIVE TERMINAL ARCADE &amp; INTERACTIVE CLI ]</a></code>
 </div>
+
+<p align="center">
+  <a href="https://binod231.github.io/Binod231/"><img src="https://img.shields.io/badge/LAUNCH_INTERACTIVE_3D_GAME-CLOUD__CORE__3D-10b981?style=for-the-badge&labelColor=0d1117" alt="Launch CLOUD_CORE 3D" /></a>
+</p>
 
 ---
 

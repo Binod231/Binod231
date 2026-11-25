@@ -3,393 +3,667 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>DEVOPS_DEFENDER.SH // Binod231 Interactive Terminal</title>
+  <title>CLOUD_CORE 3D // Binod231 Interactive DevOps Arena</title>
   <style>
+    :root {
+      --bg: #050811;
+      --panel: rgba(13, 17, 23, 0.88);
+      --border: #1e293b;
+      --cyan: #38bdf8;
+      --emerald: #10b981;
+      --amber: #f59e0b;
+      --red: #ef4444;
+    }
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
-      background: #06090f;
+      background: radial-gradient(circle at 50% 15%, #0f172a 0%, #050811 70%);
       color: #e2e8f0;
       font-family: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+      min-height: 100vh;
       display: flex;
       flex-direction: column;
       align-items: center;
-      padding: 20px 14px;
-      gap: 16px;
+      padding: 16px;
+      gap: 14px;
     }
-    .terminal {
+    .shell {
       width: 100%;
-      max-width: 960px;
-      background: #0d1117;
-      border: 1px solid #1e293b;
-      border-radius: 12px;
+      max-width: 1040px;
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 14px;
       overflow: hidden;
-      box-shadow: 0 0 42px rgba(16, 185, 129, 0.12);
+      backdrop-filter: blur(12px);
+      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.65), 0 0 40px rgba(56, 189, 248, 0.08);
     }
     .topbar {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 10px 16px;
-      background: #09111f;
-      border-bottom: 1px solid #1e293b;
-      font-size: 13px;
+      padding: 10px 18px;
+      background: #090e1a;
+      border-bottom: 1px solid var(--border);
+      font-size: 12.5px;
+      flex-wrap: wrap;
+      gap: 10px;
     }
-    .dots { display: flex; gap: 7px; align-items: center; }
-    .dot { width: 11px; height: 11px; border-radius: 50%; }
+    .dots { display: flex; align-items: center; gap: 7px; }
+    .dot { width: 10px; height: 10px; border-radius: 50%; }
+    .nav-links { display: flex; gap: 14px; align-items: center; }
+    .nav-links a { color: var(--cyan); text-decoration: none; font-weight: 600; }
+    .nav-links a:hover { color: var(--emerald); }
     .hud {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 10px;
+      padding: 10px 18px;
+      background: #070b14;
+      border-bottom: 1px solid var(--border);
+      font-size: 12px;
+    }
+    .stat {
+      background: #0d1322;
+      border: 1px solid #1e293b;
+      border-radius: 8px;
+      padding: 6px 10px;
       display: flex;
       justify-content: space-between;
-      flex-wrap: wrap;
-      gap: 12px;
-      padding: 10px 16px;
-      background: #090d16;
-      border-bottom: 1px solid #1e293b;
-      font-size: 13px;
+      align-items: center;
     }
-    .hud span b { color: #34d399; }
+    .stat span { color: #94a3b8; }
+    .stat b { color: var(--emerald); font-size: 13px; }
+    .stage-wrap { position: relative; width: 100%; background: #04070e; }
     canvas {
       display: block;
       width: 100%;
       height: auto;
-      background: #070b12;
       cursor: crosshair;
       touch-action: none;
     }
-    .controls {
+    .abilities {
       display: flex;
       justify-content: space-between;
       align-items: center;
       flex-wrap: wrap;
       gap: 10px;
-      padding: 12px 16px;
-      background: #09111f;
-      border-top: 1px solid #1e293b;
-      font-size: 12px;
-      color: #94a3b8;
+      padding: 10px 18px;
+      background: #090e1a;
+      border-top: 1px solid var(--border);
     }
+    .btn-group { display: flex; gap: 8px; flex-wrap: wrap; }
     button {
-      background: #052e16;
-      color: #34d399;
-      border: 1px solid #10b981;
-      padding: 6px 14px;
-      border-radius: 6px;
+      background: #0d1628;
+      color: #e2e8f0;
+      border: 1px solid #334155;
+      padding: 7px 12px;
+      border-radius: 7px;
       font-family: inherit;
-      font-weight: bold;
+      font-size: 12px;
+      font-weight: 700;
       cursor: pointer;
+      transition: all 0.15s ease;
     }
-    button:hover { background: #10b981; color: #04070e; }
-    .cli-box {
-      padding: 14px 16px;
-      background: #070b12;
-      font-size: 13px;
-      line-height: 1.55;
+    button:hover:not(:disabled) { border-color: var(--cyan); color: var(--cyan); transform: translateY(-1px); }
+    button.ready { border-color: var(--emerald); color: var(--emerald); box-shadow: 0 0 14px rgba(16, 185, 129, 0.25); }
+    button:disabled { opacity: 0.45; cursor: not-allowed; }
+    .cli-wrap {
+      padding: 12px 18px;
+      background: #060911;
+      border-top: 1px solid var(--border);
+      font-size: 12.5px;
     }
-    .cli-out {
-      max-height: 180px;
+    .cli-log {
+      max-height: 110px;
       overflow-y: auto;
-      margin-bottom: 10px;
-      color: #cbd5e1;
+      color: #94a3b8;
+      line-height: 1.5;
       white-space: pre-wrap;
+      margin-bottom: 8px;
     }
-    .cli-input-row {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      border-top: 1px solid #1e293b;
-      padding-top: 10px;
-    }
-    .prompt { color: #34d399; font-weight: bold; white-space: nowrap; }
-    input[type="text"] {
+    .cli-row { display: flex; gap: 8px; align-items: center; border-top: 1px solid #151e30; padding-top: 8px; }
+    .cli-prompt { color: var(--emerald); font-weight: bold; }
+    input {
       flex: 1;
       background: transparent;
       border: none;
       outline: none;
-      color: #38bdf8;
+      color: var(--cyan);
       font-family: inherit;
-      font-size: 13px;
+      font-size: 12.5px;
     }
-    a { color: #38bdf8; text-decoration: none; }
-    a:hover { text-decoration: underline; }
   </style>
 </head>
 <body>
-  <div class="terminal">
+  <div class="shell">
     <div class="topbar">
       <div class="dots">
         <span class="dot" style="background:#ef4444"></span>
         <span class="dot" style="background:#f59e0b"></span>
         <span class="dot" style="background:#10b981"></span>
-        <span style="margin-left:8px;color:#34d399;font-weight:bold">binod@aws-prod:~# ./devops_defender.sh --live</span>
+        <span style="margin-left:8px;color:#34d399;font-weight:700">root@binod-cloud:~# ./cloud_core_3d.sh --webgl-mesh</span>
       </div>
-      <div>
-        <a href="https://binodprasadjoshi.com.np">[ ./portfolio ]</a> &nbsp;
+      <div class="nav-links">
+        <button id="audioBtn">SFX: ON</button>
+        <a href="https://binodprasadjoshi.com.np">[ ./portfolio ]</a>
         <a href="https://github.com/Binod231">[ ./github ]</a>
       </div>
     </div>
-    <div class="hud">
-      <span>SCORE: <b id="score">0</b> XP</span>
-      <span>WAVE: <b id="wave">1</b></span>
-      <span>CLUSTER_SLA: <b id="hp">100%</b></span>
-      <span>WEAPON: <b id="weapon">SINGLE_WAF</b></span>
-      <span>HIGH_SCORE: <b id="hi">0</b></span>
-    </div>
-    <canvas id="game" width="940" height="420"></canvas>
-    <div class="controls">
-      <span>CONTROLS: [A/D] or [LEFT/RIGHT] or [MOUSE/TOUCH] to steer | [SPACE] or [CLICK] to fire | Catch green [ECS]/[WAF] drops</span>
-      <button id="restartBtn">./reboot_cluster.sh</button>
-    </div>
-  </div>
 
-  <div class="terminal">
-    <div class="topbar">
-      <span style="color:#38bdf8;font-weight:bold">TTY2 // INTERACTIVE_DEVOPS_SHELL (Type: help, whoami, stack, certs, missions, clear)</span>
+    <div class="hud">
+      <div class="stat"><span>SCORE</span><b id="score">0 XP</b></div>
+      <div class="stat"><span>COMBO</span><b id="combo" style="color:#38bdf8">x1</b></div>
+      <div class="stat"><span>WAVE</span><b id="wave">1</b></div>
+      <div class="stat"><span>SLA_HP</span><b id="hp">100%</b></div>
+      <div class="stat"><span>ENERGY</span><b id="energy" style="color:#f59e0b">40%</b></div>
+      <div class="stat"><span>BEST</span><b id="hi">0</b></div>
     </div>
-    <div class="cli-box">
-      <div id="cliOut" class="cli-out">binod@aws-prod:~$ help
-Commands: whoami | stack | certs | missions | contact | clear</div>
-      <div class="cli-input-row">
-        <span class="prompt">visitor@binod-cloud:~$</span>
-        <input id="cliInput" type="text" placeholder="type a command and press Enter (e.g. whoami)..." autocomplete="off" />
+
+    <div class="stage-wrap">
+      <canvas id="c" width="1000" height="480"></canvas>
+    </div>
+
+    <div class="abilities">
+      <div class="btn-group">
+        <button id="btnWaf" title="Cost: 30 Energy">[1] ./waf_shield.sh (30E)</button>
+        <button id="btnScale" title="Cost: 50 Energy">[2] ./autoscale_ecs.sh (50E)</button>
+        <button id="btnCanary" title="Cost: 75 Energy">[3] ./canary_pulse.sh (75E)</button>
+      </div>
+      <div class="btn-group">
+        <span style="font-size:11.5px;color:#64748b;align-self:center">STEER: Mouse / Touch / WASD | FIRE: Click / Space</span>
+        <button id="btnReset">./reboot.sh</button>
+      </div>
+    </div>
+
+    <div class="cli-wrap">
+      <div id="cliLog" class="cli-log">[SYS] CLOUD_CORE 3D online. Defend the AWS mesh from incoming 3D threats!
+[TIP] Type 'help', 'whoami', 'stack', 'missions', 'waf', 'scale', or 'canary' below.</div>
+      <div class="cli-row">
+        <span class="cli-prompt">visitor@binod-cloud:~$</span>
+        <input id="cliInput" type="text" placeholder="enter DevOps command (e.g. waf, scale, whoami, help)..." autocomplete="off" />
       </div>
     </div>
   </div>
 
   <script>
-    // --- Playable Arcade Canvas ---
-    const canvas = document.getElementById('game');
+    const canvas = document.getElementById('c');
     const ctx = canvas.getContext('2d');
-    const threats = ['CVE', '502', 'OOM', 'DDOS', 'LAG'];
-    const colors = { CVE: '#ef4444', '502': '#f59e0b', OOM: '#ec4899', DDOS: '#f97316', LAG: '#a855f7' };
+    const W = canvas.width, H = canvas.height;
+    const CX = W / 2, HORIZON_Y = 148;
 
-    let score = 0, wave = 1, hp = 100, over = false, dualTimer = 0;
-    let hi = Number(localStorage.getItem('binod_devops_hi') || 0);
-    document.getElementById('hi').textContent = hi;
-
-    const player = { x: 450, y: 374, w: 38, h: 24, speed: 6.5 };
-    let bullets = [], enemies = [], particles = [], drops = [], keys = {}, cooldown = 0;
-
-    function spawnWave() {
-      enemies = [];
-      const rows = Math.min(4, 1 + Math.floor((wave + 1) / 2));
-      const cols = 9;
-      for (let r = 0; r < rows; r++) {
-        for (let c = 0; c < cols; c++) {
-          const type = threats[(r + c + wave) % threats.length];
-          enemies.push({ x: 75 + c * 90, y: 40 + r * 44, w: 54, h: 28, dx: (1.15 + wave * 0.24), type });
-        }
-      }
+    // WebAudio Synth SFX
+    let audioCtx = null, sfxEnabled = true;
+    function playTone(freq, dur = 0.08, type = 'triangle', vol = 0.06) {
+      if (!sfxEnabled) return;
+      try {
+        if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        const o = audioCtx.createOscillator();
+        const g = audioCtx.createGain();
+        o.type = type;
+        o.frequency.setValueAtTime(freq, audioCtx.currentTime);
+        o.frequency.exponentialRampToValueAtTime(Math.max(40, freq * 0.45), audioCtx.currentTime + dur);
+        g.gain.setValueAtTime(vol, audioCtx.currentTime);
+        g.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + dur);
+        o.connect(g); g.connect(audioCtx.destination);
+        o.start(); o.stop(audioCtx.currentTime + dur);
+      } catch {}
     }
 
-    function shoot() {
+    // 3D Polyhedra Geometry (Octahedron & Cube)
+    const OCTA_VERTS = [[0,1,0],[1,0,0],[0,0,1],[-1,0,0],[0,0,-1],[0,-1,0]];
+    const OCTA_EDGES = [[0,1],[0,2],[0,3],[0,4],[5,1],[5,2],[5,3],[5,4],[1,2],[2,3],[3,4],[4,1]];
+    const CUBE_VERTS = [[-1,-1,-1],[1,-1,-1],[1,1,-1],[-1,1,-1],[-1,-1,1],[1,-1,1],[1,1,1],[-1,1,1]];
+    const CUBE_EDGES = [[0,1],[1,2],[2,3],[3,0],[4,5],[5,6],[6,7],[7,4],[0,4],[1,5],[2,6],[3,7]];
+
+    const THREATS = [
+      { tag: 'CVE-0DAY', color: '#ef4444', shape: 'octa', hp: 2, spd: 2.3 },
+      { tag: '502-HYDRA', color: '#f59e0b', shape: 'cube', hp: 3, spd: 1.9 },
+      { tag: 'OOM-TITAN', color: '#ec4899', shape: 'cube', hp: 4, spd: 1.6 },
+      { tag: 'DDOS-SWARM', color: '#a855f7', shape: 'octa', hp: 1, spd: 2.9 }
+    ];
+
+    let score = 0, combo = 1, comboTimer = 0, wave = 1, hp = 100, energy = 40;
+    let hi = Number(localStorage.getItem('binod_cc3d_hi') || 0);
+    let over = false, shieldTimer = 0, wingmenTimer = 0, shake = 0, gridZ = 0;
+
+    const ship = { x: 0, y: 120, targetX: 0, targetY: 120, tilt: 0 };
+    let bolts = [], enemies = [], particles = [], rings = [], stars = [], keys = {};
+    let cooldown = 0, spawnTimer = 0, waveKills = 0;
+
+    for (let i = 0; i < 90; i++) {
+      stars.push({ x: (Math.random() - 0.5) * 1800, y: (Math.random() - 0.5) * 900, z: Math.random() * 900 + 80 });
+    }
+
+    function project3D(x, y, z) {
+      const fov = 340;
+      const scale = fov / Math.max(25, z);
+      return { sx: CX + x * scale, sy: HORIZON_Y + y * scale, scale };
+    }
+
+    function rotatePt(v, ax, ay, az) {
+      let [x, y, z] = v;
+      let cy = Math.cos(ay), sy = Math.sin(ay);
+      [x, z] = [x * cy - z * sy, x * sy + z * cy];
+      let cx = Math.cos(ax), sx = Math.sin(ax);
+      [y, z] = [y * cx - z * sx, y * sx + z * cx];
+      let cz = Math.cos(az), sz = Math.sin(az);
+      [x, y] = [x * cz - y * sz, x * sz + y * cz];
+      return [x, y, z];
+    }
+
+    function spawnEnemy() {
+      const t = THREATS[Math.floor(Math.random() * THREATS.length)];
+      enemies.push({
+        x: (Math.random() - 0.5) * 620,
+        y: (Math.random() - 0.5) * 140 + 40,
+        z: 920,
+        rx: Math.random() * 6, ry: Math.random() * 6, rz: 0,
+        hp: t.hp + Math.floor(wave / 3),
+        maxHp: t.hp + Math.floor(wave / 3),
+        spd: t.spd + wave * 0.16,
+        tag: t.tag, color: t.color, shape: t.shape
+      });
+    }
+
+    function fireBolts() {
       if (over || cooldown > 0) return;
-      if (dualTimer > 0) {
-        bullets.push({ x: player.x + 6, y: player.y - 10, w: 4, h: 14 });
-        bullets.push({ x: player.x + player.w - 10, y: player.y - 10, w: 4, h: 14 });
-        cooldown = 10;
-      } else {
-        bullets.push({ x: player.x + player.w / 2 - 2, y: player.y - 10, w: 4, h: 14 });
-        cooldown = 12;
+      bolts.push({ x: ship.x, y: ship.y - 6, z: 110, vx: 0 });
+      if (wingmenTimer > 0) {
+        bolts.push({ x: ship.x - 42, y: ship.y + 4, z: 110, vx: 0.4 });
+        bolts.push({ x: ship.x + 42, y: ship.y + 4, z: 110, vx: -0.4 });
       }
+      cooldown = wingmenTimer > 0 ? 8 : 11;
+      playTone(680, 0.06, 'sawtooth', 0.035);
+    }
+
+    function activateWaf() {
+      if (over || energy < 30) return false;
+      energy -= 30;
+      shieldTimer = 420;
+      hp = Math.min(100, hp + 15);
+      rings.push({ x: ship.x, y: ship.y, z: 110, r: 10, maxR: 120, color: '#38bdf8' });
+      playTone(420, 0.22, 'sine', 0.08);
+      syncHud();
+      return true;
+    }
+
+    function activateScale() {
+      if (over || energy < 50) return false;
+      energy -= 50;
+      wingmenTimer = 480;
+      playTone(540, 0.2, 'triangle', 0.08);
+      syncHud();
+      return true;
+    }
+
+    function activateCanary() {
+      if (over || energy < 75) return false;
+      energy -= 75;
+      shake = 14;
+      rings.push({ x: 0, y: 40, z: 260, r: 20, maxR: 540, color: '#10b981' });
+      enemies.forEach(en => {
+        score += 120 * combo;
+        for (let k = 0; k < 14; k++) {
+          particles.push({ x: en.x, y: en.y, z: en.z, vx: (Math.random()-0.5)*9, vy: (Math.random()-0.5)*9, vz: (Math.random()-0.5)*9, life: 28, c: en.color });
+        }
+      });
+      enemies = [];
+      waveKills += 4;
+      playTone(180, 0.35, 'sawtooth', 0.1);
+      syncHud();
+      return true;
     }
 
     function resetGame() {
-      score = 0; wave = 1; hp = 100; over = false; dualTimer = 0;
-      bullets = []; particles = []; drops = []; player.x = 450;
-      spawnWave();
+      score = 0; combo = 1; comboTimer = 0; wave = 1; hp = 100; energy = 40;
+      over = false; shieldTimer = 0; wingmenTimer = 0; waveKills = 0;
+      bolts = []; enemies = []; particles = []; rings = [];
+      ship.x = 0; ship.y = 120; ship.targetX = 0; ship.targetY = 120;
       syncHud();
     }
 
     function syncHud() {
-      document.getElementById('score').textContent = score;
+      document.getElementById('score').textContent = score + ' XP';
+      document.getElementById('combo').textContent = 'x' + combo + (combo >= 5 ? ' OVERCLOCK' : '');
       document.getElementById('wave').textContent = wave;
       document.getElementById('hp').textContent = hp + '%';
-      document.getElementById('weapon').textContent = dualTimer > 0 ? 'DUAL_AUTOSCALE' : 'SINGLE_WAF';
+      document.getElementById('hp').style.color = hp > 50 ? '#10b981' : (hp > 25 ? '#f59e0b' : '#ef4444');
+      document.getElementById('energy').textContent = Math.floor(energy) + '%';
+      document.getElementById('btnWaf').className = energy >= 30 ? 'ready' : '';
+      document.getElementById('btnScale').className = energy >= 50 ? 'ready' : '';
+      document.getElementById('btnCanary').className = energy >= 75 ? 'ready' : '';
       if (score > hi) {
         hi = score;
-        localStorage.setItem('binod_devops_hi', hi);
-        document.getElementById('hi').textContent = hi;
+        localStorage.setItem('binod_cc3d_hi', hi);
       }
+      document.getElementById('hi').textContent = hi + ' XP';
     }
+
+    document.getElementById('audioBtn').onclick = () => {
+      sfxEnabled = !sfxEnabled;
+      document.getElementById('audioBtn').textContent = 'SFX: ' + (sfxEnabled ? 'ON' : 'OFF');
+    };
+    document.getElementById('btnWaf').onclick = activateWaf;
+    document.getElementById('btnScale').onclick = activateScale;
+    document.getElementById('btnCanary').onclick = activateCanary;
+    document.getElementById('btnReset').onclick = resetGame;
 
     window.addEventListener('keydown', e => {
       if (document.activeElement === document.getElementById('cliInput')) return;
       keys[e.code] = true;
-      if (e.code === 'Space') { e.preventDefault(); shoot(); }
+      if (e.code === 'Space') { e.preventDefault(); fireBolts(); }
+      if (e.code === 'Digit1') activateWaf();
+      if (e.code === 'Digit2') activateScale();
+      if (e.code === 'Digit3') activateCanary();
       if (e.code === 'KeyR' && over) resetGame();
     });
     window.addEventListener('keyup', e => { keys[e.code] = false; });
 
-    function pointerMove(clientX) {
-      const rect = canvas.getBoundingClientRect();
-      const mx = ((clientX - rect.left) / rect.width) * canvas.width;
-      player.x = Math.max(10, Math.min(canvas.width - player.w - 10, mx - player.w / 2));
+    function steerPointer(clientX, clientY) {
+      const r = canvas.getBoundingClientRect();
+      const nx = ((clientX - r.left) / r.width) * 2 - 1;
+      const ny = ((clientY - r.top) / r.height);
+      ship.targetX = Math.max(-170, Math.min(170, nx * 185));
+      ship.targetY = Math.max(40, Math.min(145, ny * 150 + 20));
     }
-    canvas.addEventListener('mousemove', e => pointerMove(e.clientX));
-    canvas.addEventListener('touchmove', e => { e.preventDefault(); pointerMove(e.touches[0].clientX); shoot(); }, { passive: false });
-    canvas.addEventListener('click', () => { over ? resetGame() : shoot(); });
-    document.getElementById('restartBtn').addEventListener('click', resetGame);
+    canvas.addEventListener('mousemove', e => steerPointer(e.clientX, e.clientY));
+    canvas.addEventListener('touchmove', e => { e.preventDefault(); steerPointer(e.touches[0].clientX, e.touches[0].clientY); fireBolts(); }, { passive: false });
+    canvas.addEventListener('click', () => { over ? resetGame() : fireBolts(); });
+
+    function drawFloorGrid() {
+      ctx.save();
+      // Horizon glow
+      const hg = ctx.createLinearGradient(0, HORIZON_Y - 30, 0, H);
+      hg.addColorStop(0, 'rgba(56, 189, 248, 0.22)');
+      hg.addColorStop(0.25, 'rgba(16, 185, 129, 0.08)');
+      hg.addColorStop(1, 'rgba(4, 7, 14, 0)');
+      ctx.fillStyle = hg;
+      ctx.fillRect(0, HORIZON_Y - 30, W, H - HORIZON_Y + 30);
+
+      // Perspective Z lines
+      ctx.strokeStyle = 'rgba(56, 189, 248, 0.24)';
+      ctx.lineWidth = 1;
+      for (let gx = -900; gx <= 900; gx += 90) {
+        const p1 = project3D(gx, 165, 920);
+        const p2 = project3D(gx, 165, 70);
+        ctx.beginPath(); ctx.moveTo(p1.sx, p1.sy); ctx.lineTo(p2.sx, p2.sy); ctx.stroke();
+      }
+      // Horizontal scrolling depth lines
+      gridZ = (gridZ + 7) % 70;
+      for (let z = 80 + (70 - gridZ); z < 920; z += 70) {
+        const alpha = Math.max(0.04, 0.35 * (1 - z / 940));
+        ctx.strokeStyle = `rgba(16, 185, 129, ${alpha})`;
+        const p1 = project3D(-900, 165, z);
+        const p2 = project3D(900, 165, z);
+        ctx.beginPath(); ctx.moveTo(p1.sx, p1.sy); ctx.lineTo(p2.sx, p2.sy); ctx.stroke();
+      }
+      ctx.restore();
+    }
+
+    function draw3DShip(sx, sy, scale, tilt, isWingman = false) {
+      ctx.save();
+      ctx.translate(sx, sy);
+      ctx.rotate(tilt);
+      const s = scale * (isWingman ? 0.58 : 1.0);
+
+      // Thruster glow
+      ctx.fillStyle = isWingman ? '#34d399' : '#38bdf8';
+      ctx.beginPath();
+      ctx.ellipse(0, 10 * s, 5 * s, (7 + Math.random() * 5) * s, 0, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Main 3D cyber delta craft
+      ctx.beginPath();
+      ctx.moveTo(0, -18 * s);
+      ctx.lineTo(22 * s, 10 * s);
+      ctx.lineTo(6 * s, 5 * s);
+      ctx.lineTo(0, 12 * s);
+      ctx.lineTo(-6 * s, 5 * s);
+      ctx.lineTo(-22 * s, 10 * s);
+      ctx.closePath();
+      ctx.fillStyle = isWingman ? 'rgba(16, 185, 129, 0.35)' : 'rgba(14, 165, 233, 0.35)';
+      ctx.fill();
+      ctx.strokeStyle = isWingman ? '#34d399' : '#7dd3fc';
+      ctx.lineWidth = 2;
+      ctx.stroke();
+
+      // Cockpit highlight
+      ctx.beginPath();
+      ctx.moveTo(0, -12 * s);
+      ctx.lineTo(5 * s, 2 * s);
+      ctx.lineTo(-5 * s, 2 * s);
+      ctx.closePath();
+      ctx.fillStyle = '#e0f2fe';
+      ctx.fill();
+      ctx.restore();
+    }
 
     function loop() {
-      ctx.fillStyle = '#070b12';
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      ctx.save();
+      if (shake > 0) {
+        ctx.translate((Math.random() - 0.5) * shake, (Math.random() - 0.5) * shake);
+        shake *= 0.85;
+        if (shake < 0.4) shake = 0;
+      }
 
-      ctx.strokeStyle = '#111927';
-      ctx.lineWidth = 1;
-      for (let x = 0; x < canvas.width; x += 36) { ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, canvas.height); ctx.stroke(); }
-      for (let y = 0; y < canvas.height; y += 36) { ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(canvas.width, y); ctx.stroke(); }
+      ctx.fillStyle = '#04070e';
+      ctx.fillRect(0, 0, W, H);
+
+      // 3D Starfield
+      stars.forEach(st => {
+        st.z -= over ? 1.5 : 5.5;
+        if (st.z < 40) { st.z = 920; st.x = (Math.random()-0.5)*1800; st.y = (Math.random()-0.5)*700; }
+        const p = project3D(st.x, st.y - 120, st.z);
+        ctx.fillStyle = `rgba(148, 163, 184, ${1 - st.z / 950})`;
+        ctx.fillRect(p.sx, p.sy, Math.max(1, p.scale * 1.4), Math.max(1, p.scale * 1.4));
+      });
+
+      drawFloorGrid();
 
       if (!over) {
-        if (keys['ArrowLeft'] || keys['KeyA']) player.x = Math.max(10, player.x - player.speed);
-        if (keys['ArrowRight'] || keys['KeyD']) player.x = Math.min(canvas.width - player.w - 10, player.x + player.speed);
-        if (keys['Space']) shoot();
+        if (keys['ArrowLeft'] || keys['KeyA']) ship.targetX = Math.max(-175, ship.targetX - 7);
+        if (keys['ArrowRight'] || keys['KeyD']) ship.targetX = Math.min(175, ship.targetX + 7);
+        if (keys['ArrowUp'] || keys['KeyW']) ship.targetY = Math.max(40, ship.targetY - 5);
+        if (keys['ArrowDown'] || keys['KeyS']) ship.targetY = Math.min(145, ship.targetY + 5);
+        if (keys['Space']) fireBolts();
+
+        const prevX = ship.x;
+        ship.x += (ship.targetX - ship.x) * 0.22;
+        ship.y += (ship.targetY - ship.y) * 0.22;
+        ship.tilt = Math.max(-0.45, Math.min(0.45, (ship.x - prevX) * 0.035));
+
         if (cooldown > 0) cooldown--;
-        if (dualTimer > 0) { dualTimer--; if (dualTimer === 0) syncHud(); }
+        if (shieldTimer > 0) shieldTimer--;
+        if (wingmenTimer > 0) wingmenTimer--;
+        if (comboTimer > 0) { comboTimer--; if (comboTimer === 0) { combo = 1; syncHud(); } }
 
-        bullets.forEach(b => b.y -= 9.5);
-        bullets = bullets.filter(b => b.y > -20);
+        energy = Math.min(100, energy + 0.05);
 
-        let flip = false;
-        enemies.forEach(en => {
-          en.x += en.dx;
-          if (en.x <= 12 || en.x + en.w >= canvas.width - 12) flip = true;
-        });
-        if (flip) enemies.forEach(en => { en.dx *= -1; en.y += 16; });
+        spawnTimer--;
+        if (spawnTimer <= 0) {
+          spawnEnemy();
+          spawnTimer = Math.max(22, 62 - wave * 4);
+        }
 
-        for (let i = bullets.length - 1; i >= 0; i--) {
-          const b = bullets[i];
-          for (let j = enemies.length - 1; j >= 0; j--) {
-            const en = enemies[j];
-            if (b.x < en.x + en.w && b.x + b.w > en.x && b.y < en.y + en.h && b.y + b.h > en.y) {
-              bullets.splice(i, 1);
-              enemies.splice(j, 1);
-              score += 50;
-              if (Math.random() < 0.14) {
-                drops.push({ x: en.x + 14, y: en.y, w: 28, h: 18, kind: Math.random() < 0.5 ? 'ECS' : 'WAF' });
+        // Move bolts into 3D depth
+        for (let i = bolts.length - 1; i >= 0; i--) {
+          const b = bolts[i];
+          b.z += 28;
+          b.x += b.vx;
+          if (b.z > 940) bolts.splice(i, 1);
+        }
+
+        // Move enemies toward foreground
+        for (let i = enemies.length - 1; i >= 0; i--) {
+          const en = enemies[i];
+          en.z -= en.spd;
+          en.rx += 0.03; en.ry += 0.04;
+
+          // Bolt collision in 3D space
+          let destroyed = false;
+          for (let j = bolts.length - 1; j >= 0; j--) {
+            const b = bolts[j];
+            if (Math.abs(b.z - en.z) < 42 && Math.abs(b.x - en.x) < 42 && Math.abs(b.y - en.y) < 42) {
+              bolts.splice(j, 1);
+              en.hp--;
+              playTone(300, 0.05, 'square', 0.04);
+              if (en.hp <= 0) {
+                enemies.splice(i, 1);
+                destroyed = true;
+                combo = Math.min(8, combo + 1);
+                comboTimer = 180;
+                score += 100 * combo;
+                energy = Math.min(100, energy + 9);
+                waveKills++;
+                if (waveKills >= 10 + wave * 3) { wave++; waveKills = 0; }
+                rings.push({ x: en.x, y: en.y, z: en.z, r: 4, maxR: 60, color: en.color });
+                for (let k = 0; k < 12; k++) {
+                  particles.push({ x: en.x, y: en.y, z: en.z, vx: (Math.random()-0.5)*7, vy: (Math.random()-0.5)*7, vz: (Math.random()-0.5)*7, life: 24, c: en.color });
+                }
+                playTone(140, 0.16, 'sawtooth', 0.07);
+                syncHud();
+                break;
               }
-              for (let p = 0; p < 8; p++) {
-                particles.push({ x: en.x + en.w / 2, y: en.y + en.h / 2, vx: (Math.random() - 0.5) * 5, vy: (Math.random() - 0.5) * 5, life: 20, c: colors[en.type] });
-              }
-              syncHud();
-              break;
             }
           }
-        }
+          if (destroyed) continue;
 
-        // Power-up drops
-        for (let i = drops.length - 1; i >= 0; i--) {
-          const d = drops[i];
-          d.y += 2.6;
-          if (d.x < player.x + player.w && d.x + d.w > player.x && d.y < player.y + player.h && d.y + d.h > player.y) {
-            if (d.kind === 'ECS') dualTimer = 360;
-            else hp = Math.min(100, hp + 15);
-            drops.splice(i, 1);
+          if (en.z < 95) {
+            enemies.splice(i, 1);
+            if (shieldTimer <= 0) {
+              hp = Math.max(0, hp - 20);
+              combo = 1;
+              shake = 10;
+              playTone(95, 0.25, 'sawtooth', 0.1);
+              if (hp <= 0) over = true;
+            } else {
+              rings.push({ x: ship.x, y: ship.y, z: 105, r: 8, maxR: 75, color: '#38bdf8' });
+            }
             syncHud();
-          } else if (d.y > canvas.height) {
-            drops.splice(i, 1);
           }
-        }
-
-        enemies.forEach(en => {
-          if (en.y + en.h >= player.y) {
-            hp = Math.max(0, hp - 25);
-            en.y = 40;
-            syncHud();
-            if (hp <= 0) over = true;
-          }
-        });
-
-        if (enemies.length === 0) {
-          wave++;
-          hp = Math.min(100, hp + 10);
-          spawnWave();
-          syncHud();
         }
       }
 
-      // Draw Player
-      ctx.fillStyle = '#38bdf8';
-      ctx.beginPath();
-      ctx.moveTo(player.x + player.w / 2, player.y);
-      ctx.lineTo(player.x + player.w, player.y + player.h);
-      ctx.lineTo(player.x, player.y + player.h);
-      ctx.closePath();
-      ctx.fill();
-      ctx.fillStyle = '#10b981';
-      ctx.fillRect(player.x + 12, player.y + player.h, 14, 4);
-
-      // Draw Bullets
-      ctx.fillStyle = '#34d399';
-      bullets.forEach(b => ctx.fillRect(b.x, b.y, b.w, b.h));
-
-      // Draw Powerups
-      ctx.font = 'bold 10px monospace';
-      ctx.textAlign = 'center';
-      drops.forEach(d => {
-        ctx.fillStyle = '#052e16';
-        ctx.strokeStyle = '#34d399';
-        ctx.fillRect(d.x, d.y, d.w, d.h);
-        ctx.strokeRect(d.x, d.y, d.w, d.h);
-        ctx.fillStyle = '#34d399';
-        ctx.fillText(d.kind, d.x + d.w / 2, d.y + 12);
-      });
-
-      // Draw Threats
-      ctx.font = 'bold 12px monospace';
+      // Draw enemies sorted back-to-front
+      enemies.sort((a, b) => b.z - a.z);
       enemies.forEach(en => {
-        ctx.fillStyle = '#09111f';
-        ctx.strokeStyle = colors[en.type];
-        ctx.lineWidth = 1.6;
-        ctx.fillRect(en.x, en.y, en.w, en.h);
-        ctx.strokeRect(en.x, en.y, en.w, en.h);
-        ctx.fillStyle = colors[en.type];
-        ctx.fillText('[' + en.type + ']', en.x + en.w / 2, en.y + 18);
+        const verts = en.shape === 'octa' ? OCTA_VERTS : CUBE_VERTS;
+        const edges = en.shape === 'octa' ? OCTA_EDGES : CUBE_EDGES;
+        const size = en.shape === 'octa' ? 30 : 22;
+        const proj = verts.map(v => {
+          const r = rotatePt([v[0]*size, v[1]*size, v[2]*size], en.rx, en.ry, en.rz);
+          return project3D(en.x + r[0], en.y + r[1], en.z + r[2]);
+        });
+        ctx.strokeStyle = en.color;
+        ctx.lineWidth = Math.max(1.2, 340 / en.z * 0.9);
+        ctx.beginPath();
+        edges.forEach(([a, b]) => { ctx.moveTo(proj[a].sx, proj[a].sy); ctx.lineTo(proj[b].sx, proj[b].sy); });
+        ctx.stroke();
+
+        const center = project3D(en.x, en.y, en.z);
+        ctx.font = `bold ${Math.max(9, Math.min(14, Math.floor(center.scale * 4.5)))}px monospace`;
+        ctx.textAlign = 'center';
+        ctx.fillStyle = '#f8fafc';
+        ctx.fillText(en.tag, center.sx, center.sy - center.scale * 11);
       });
 
-      particles.forEach(p => {
-        p.x += p.vx; p.y += p.vy; p.life--;
-        ctx.fillStyle = p.c;
-        ctx.fillRect(p.x, p.y, 3, 3);
+      // Draw plasma bolts
+      bolts.forEach(b => {
+        const p1 = project3D(b.x, b.y, b.z);
+        const p2 = project3D(b.x, b.y, b.z + 28);
+        ctx.strokeStyle = '#34d399';
+        ctx.lineWidth = Math.max(1.5, p1.scale * 1.4);
+        ctx.beginPath(); ctx.moveTo(p1.sx, p1.sy); ctx.lineTo(p2.sx, p2.sy); ctx.stroke();
       });
-      particles = particles.filter(p => p.life > 0);
+
+      // Draw shockwave rings
+      for (let i = rings.length - 1; i >= 0; i--) {
+        const rg = rings[i];
+        rg.r += (rg.maxR - rg.r) * 0.18;
+        const p = project3D(rg.x, rg.y, rg.z);
+        const alpha = Math.max(0, 1 - rg.r / rg.maxR);
+        ctx.strokeStyle = rg.color;
+        ctx.globalAlpha = alpha;
+        ctx.lineWidth = 2.5;
+        ctx.beginPath();
+        ctx.arc(p.sx, p.sy, rg.r * p.scale * 0.45, 0, Math.PI * 2);
+        ctx.stroke();
+        ctx.globalAlpha = 1;
+        if (rg.r > rg.maxR * 0.94) rings.splice(i, 1);
+      }
+
+      // Draw 3D explosion particles
+      for (let i = particles.length - 1; i >= 0; i--) {
+        const pt = particles[i];
+        pt.x += pt.vx; pt.y += pt.vy; pt.z += pt.vz; pt.life--;
+        const p = project3D(pt.x, pt.y, pt.z);
+        ctx.fillStyle = pt.c;
+        ctx.globalAlpha = Math.max(0, pt.life / 24);
+        ctx.fillRect(p.sx, p.sy, Math.max(2, p.scale * 1.6), Math.max(2, p.scale * 1.6));
+        ctx.globalAlpha = 1;
+        if (pt.life <= 0) particles.splice(i, 1);
+      }
+
+      // Draw Player Ship + Wingmen + Shield
+      const sp = project3D(ship.x, ship.y, 105);
+      draw3DShip(sp.sx, sp.sy, sp.scale * 0.48, ship.tilt, false);
+      if (wingmenTimer > 0) {
+        const w1 = project3D(ship.x - 42, ship.y + 4, 110);
+        const w2 = project3D(ship.x + 42, ship.y + 4, 110);
+        draw3DShip(w1.sx, w1.sy, w1.scale * 0.45, ship.tilt, true);
+        draw3DShip(w2.sx, w2.sy, w2.scale * 0.45, ship.tilt, true);
+      }
+      if (shieldTimer > 0) {
+        ctx.strokeStyle = '#38bdf8';
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.arc(sp.sx, sp.sy, 46, 0, Math.PI * 2);
+        ctx.stroke();
+      }
 
       if (over) {
-        ctx.fillStyle = 'rgba(7,11,18,0.85)';
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.fillStyle = 'rgba(4, 7, 14, 0.82)';
+        ctx.fillRect(0, 0, W, H);
+        ctx.textAlign = 'center';
         ctx.fillStyle = '#ef4444';
-        ctx.font = 'bold 26px monospace';
-        ctx.fillText('CLUSTER OUTAGE // GAME OVER', canvas.width / 2, 190);
+        ctx.font = 'bold 30px monospace';
+        ctx.fillText('CLUSTER OUTAGE // SLA BREACHED', W / 2, H / 2 - 20);
         ctx.fillStyle = '#34d399';
-        ctx.font = '15px monospace';
-        ctx.fillText('FINAL SCORE: ' + score + ' XP  |  PRESS [R] OR CLICK TO REBOOT', canvas.width / 2, 230);
+        ctx.font = '16px monospace';
+        ctx.fillText('SCORE: ' + score + ' XP  |  PRESS [R] OR CLICK TO REBOOT', W / 2, H / 2 + 20);
       }
 
+      ctx.restore();
       requestAnimationFrame(loop);
     }
 
-    spawnWave();
+    syncHud();
     loop();
 
-    // --- Interactive CLI Shell ---
-    const cliOut = document.getElementById('cliOut');
+    // Interactive Terminal Shell
+    const cliLog = document.getElementById('cliLog');
     const cliInput = document.getElementById('cliInput');
-    const responses = {
-      help: 'Available commands: whoami | stack | certs | missions | contact | clear',
+    const cmds = {
+      help: 'Commands: whoami | stack | certs | missions | waf | scale | canary | reboot | clear',
       whoami: 'Binod Prasad Joshi — Cloud & DevOps Consultant @ Glovion Consulting | 2x AWS Certified | AWS Community Builder (2026)',
-      stack: 'Cloud: AWS (EC2, ECS Fargate, RDS, S3, SAM, CloudFormation, Route53, WAF, Bedrock), Private Cloud\nDevOps: GitHub Actions, Docker, Compose, Nginx, Prometheus, Grafana, Odoo ERP\nBackend: Python, FastAPI, Django, Flask, PostgreSQL, Redis, pgvector, ChromaDB',
-      certs: '[PASS] AWS Solutions Architect - Associate (SAA-C03)\n[PASS] AWS Cloud Practitioner (CLF-C02)\n[PASS] AWS Community Builder (Dev Tools 2026)\n[PASS] Google Student Ambassador (2026)\n[PASS] NPTEL Elite + Silver | LeetCode Top SQL 50',
-      missions: '1) Glovion Consulting: Enterprise ERP (Odoo) + Multi-DC Monitoring (99.9% SLA)\n2) One Cloud Utopia: 4 Prod AWS Apps (-30% AWS Spend, ~50% Faster CI/CD)\n3) Karnovation Inc: AWS Pathway EdTech (+95% OAuth2 Speedup via Redis JWKS)\n4) Sabudh Foundation: Grounded RAG & LangGraph Multi-Agent Pipelines',
-      contact: 'Portfolio: https://binodprasadjoshi.com.np\nLinkedIn : https://linkedin.com/in/binod-prasad-joshi-549067281\nEmail    : joshibinodprasad77@gmail.com'
+      stack: 'AWS (ECS Fargate, RDS, SAM, CloudFormation, Bedrock, WAF), Docker, GitHub Actions, Prometheus, Grafana, FastAPI, PostgreSQL, Redis',
+      certs: '[PASS] AWS Solutions Architect (SAA-C03) | [PASS] AWS Cloud Practitioner (CLF-C02) | [PASS] AWS Community Builder',
+      missions: 'Glovion ERP (99.9% SLA) | One Cloud Utopia (-30% AWS Bill) | Karnovation (+95% OAuth2) | Sabudh RAG (-70% Review)',
+      waf: () => activateWaf() ? '[OK] WAF Energy Shield deployed (+15% SLA HP).' : '[ERR] Need 30 Energy!',
+      scale: () => activateScale() ? '[OK] ECS Autoscale wingmen online!' : '[ERR] Need 50 Energy!',
+      canary: () => activateCanary() ? '[OK] Canary Shockwave pulse detonated!' : '[ERR] Need 75 Energy!',
+      reboot: () => { resetGame(); return '[OK] Cluster rebooted.'; }
     };
 
     cliInput.addEventListener('keydown', e => {
       if (e.key !== 'Enter') return;
-      const cmd = cliInput.value.trim().toLowerCase();
+      const raw = cliInput.value.trim().toLowerCase();
       cliInput.value = '';
-      if (!cmd) return;
-      if (cmd === 'clear') { cliOut.textContent = ''; return; }
-      const out = responses[cmd] || `bash: ${cmd}: command not found (try 'help')`;
-      cliOut.textContent += `\nvisitor@binod-cloud:~$ ${cmd}\n${out}`;
-      cliOut.scrollTop = cliOut.scrollHeight;
+      if (!raw) return;
+      if (raw === 'clear') { cliLog.textContent = ''; return; }
+      const entry = cmds[raw];
+      const out = typeof entry === 'function' ? entry() : (entry || `bash: ${raw}: not found (try 'help')`);
+      cliLog.textContent += `\nvisitor@binod-cloud:~$ ${raw}\n${out}`;
+      cliLog.scrollTop = cliLog.scrollHeight;
     });
   </script>
 </body>
